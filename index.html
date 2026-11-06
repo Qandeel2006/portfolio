@@ -4,8 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Portfolio of Qandeel Qudsia, a data science student creating practical data dashboards and web experiences.">
-  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="Qandeel Qudsia is a data science student building thoughtful dashboards, practical analyses, and polished web experiences.">
+  <meta name="theme-color" content="#fff0e8">
+  <meta property="og:title" content="Qandeel Qudsia | Data Science Portfolio">
+  <meta property="og:description" content="Thoughtful dashboards, practical analyses, and polished web experiences.">
+  <meta name="robots" content="index, follow">
 
   <title>Qandeel Qudsia | Data Science Portfolio</title>
 
@@ -13,6 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -44,10 +48,11 @@
           <li><a href="#skills">Skills</a></li>
           <li><a href="#projects">Projects</a></li>
           <li><a href="#learning">Learning</a></li>
+          <li><a href="#certificates">Certificates</a></li>
         </ul>
 
-        <button class="theme-toggle" type="button" aria-label="Switch to light mode" title="Switch color theme">
-          <span aria-hidden="true">&#9728;</span>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch color theme">
+          <span aria-hidden="true">&#10022;</span>
         </button>
 
         <a class="button button-small" href="#contact">
@@ -60,6 +65,12 @@
   <main id="main-content">
     <!-- Hero -->
     <section class="hero section-shell" id="home">
+      <div class="hero-video-layer" aria-hidden="true">
+        <video class="hero-video" id="hero-video" autoplay loop muted playsinline preload="metadata" data-hls-src="https://stream.mux.com/8wrHPCX2dC3msyYU9ObwqNdm00u3ViXvOSHUMRYSEe5Q.m3u8"></video>
+        <div class="hero-video-fade hero-video-fade-top"></div>
+        <div class="hero-video-fade hero-video-fade-bottom"></div>
+        <div class="hero-video-tint"></div>
+      </div>
       <div class="hero-copy reveal">
         <p class="eyebrow">
           <span class="signal"></span>
@@ -98,12 +109,12 @@
         </dl>
       </div>
 
-      <div class="hero-visual reveal" aria-label="Profile of Qandeel Qudsia">
+      <div class="hero-visual reveal" aria-label="Illustrated Qandeel helper">
         <div class="orbit orbit-large"></div>
         <div class="orbit orbit-small"></div>
 
-        <div class="profile-frame">
-          <img src="assets/profile.jpeg" alt="Qandeel Qudsia" fetchpriority="high">
+        <div class="profile-frame profile-frame-helper">
+          <img src="assets/qandeel-helper.png" alt="Illustrated Qandeel helper" fetchpriority="high">
           <div class="profile-label">
             <span class="online-dot"></span>
             Available to collaborate
@@ -199,8 +210,8 @@
 
       <div class="projects-grid">
         <article class="project-card reveal">
-          <a class="project-image" href="https://github.com/Qandeel2006/powerbi-dashboard" target="_blank" rel="noopener" aria-label="Open Sales Performance Dashboard repository">
-            <img src="assets/sales-dashboard.png" alt="Sales Performance Dashboard preview" loading="lazy">
+          <a class="project-image" href="https://github.com/Qandeel2006" target="_blank" rel="noopener" aria-label="Visit Qandeel's GitHub profile">
+            <img src="assets/sales-dashboard.jpg" alt="Sales Performance Dashboard preview" loading="lazy" width="1800" height="1041">
             <span class="image-link" aria-hidden="true">&#8599;</span>
           </a>
           <div class="project-info">
@@ -210,15 +221,15 @@
             <ul class="tag-list">
               <li>Power BI</li><li>DAX</li><li>Power Query</li><li>Excel</li>
             </ul>
-            <a class="project-link" href="https://github.com/Qandeel2006/powerbi-dashboard" target="_blank" rel="noopener">
-              View project <span aria-hidden="true">&#8599;</span>
+            <a class="project-link" href="https://github.com/Qandeel2006" target="_blank" rel="noopener">
+              Visit GitHub <span aria-hidden="true">&#8599;</span>
             </a>
           </div>
         </article>
 
         <article class="project-card reveal">
           <div class="project-image">
-            <img src="assets/hr-dashboard.png" alt="HR Analytics Dashboard preview" loading="lazy">
+            <img src="assets/hr-dashboard.jpg" alt="HR Analytics Dashboard preview" loading="lazy" width="1600" height="908">
           </div>
           <div class="project-info">
             <p class="project-index">PROJECT / 02</p>
@@ -264,34 +275,105 @@
       </div>
     </section>
 
+    <!-- Certificates -->
+    <section class="section-shell certificates-section" id="certificates">
+      <div class="section-heading reveal">
+        <p class="eyebrow">05 / Certificates</p>
+        <h2>Learning worth celebrating.</h2>
+      </div>
+      <div class="certificates-grid">
+        <article class="certificate-card reveal">
+          <a href="assets/c1.jpg" target="_blank" rel="noopener" aria-label="Open Power BI workshop certificate">
+            <img src="assets/c1.jpg" alt="Certificate of achievement for a Power BI hands-on workshop" loading="lazy" width="720" height="540">
+          </a>
+          <div>
+            <p class="project-index">CERTIFICATE / 01</p>
+            <h3>Power BI Hands-on Workshop</h3>
+            <p>PAF-IAST Data Science Society, November 2025.</p>
+          </div>
+        </article>
+        <article class="certificate-card reveal">
+          <a href="assets/c2.jpg" target="_blank" rel="noopener" aria-label="Open Introduction to C plus plus certificate">
+            <img src="assets/c2.jpg" alt="Simplilearn SkillUp certificate for Introduction to C plus plus" loading="lazy" width="2339" height="1654">
+          </a>
+          <div>
+            <p class="project-index">CERTIFICATE / 02</p>
+            <h3>Introduction to C++</h3>
+            <p>Simplilearn SkillUp, December 2025.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <!-- Contact -->
     <section class="contact-section" id="contact">
       <div class="contact-inner reveal">
-        <p class="eyebrow">05 / Get in touch</p>
-        <h2>Have an idea?<br><em>Let's talk.</em></h2>
-        <p>I'm interested in internships, collaborative projects, and conversations about data and technology.</p>
-        <div class="contact-actions">
-          <a class="button button-light" href="mailto:qandeelqudsia@gmail.com">
-            Email me <span aria-hidden="true">&#8599;</span>
-          </a>
-          <a class="text-link text-link-light" href="https://www.linkedin.com/in/qandeel-qudsia" target="_blank" rel="noopener">
-            Connect on LinkedIn <span aria-hidden="true">&#8599;</span>
-          </a>
+        <div class="contact-copy">
+          <p class="eyebrow">06 / Get in touch</p>
+          <h2>Have an idea?<br><em>Let's talk.</em></h2>
+          <p>I'm interested in internships, collaborative projects, and conversations about data and technology.</p>
+          <div class="contact-actions">
+            <a class="button button-light" href="mailto:qandeelqudsia@gmail.com">
+              Email me <span aria-hidden="true">&#8599;</span>
+            </a>
+            <a class="text-link text-link-light" href="https://pk.linkedin.com/in/qandeel-qudsia" target="_blank" rel="noopener">
+              Connect on LinkedIn <span aria-hidden="true">&#8599;</span>
+            </a>
+          </div>
         </div>
+        <form class="contact-form" id="contact-form" novalidate>
+          <label for="contact-name">Your name</label>
+          <input id="contact-name" name="name" type="text" autocomplete="name" aria-describedby="contact-name-error" required>
+          <p class="form-error" id="contact-name-error" aria-live="polite" hidden></p>
+
+          <label for="contact-message">Your message</label>
+          <textarea id="contact-message" name="message" rows="4" aria-describedby="contact-message-error" required></textarea>
+          <p class="form-error" id="contact-message-error" aria-live="polite" hidden></p>
+
+          <button class="button button-light" type="submit">Send message <span aria-hidden="true">&#8599;</span></button>
+          <p class="form-status" id="contact-form-status" role="status" aria-live="polite"></p>
+        </form>
       </div>
     </section>
   </main>
 
   <!-- Footer -->
   <footer class="site-footer section-shell">
-    <a class="logo" href="#home">QQ<span>.</span></a>
+    <a class="logo" href="#home" aria-label="Back to the top of Qandeel Qudsia's portfolio">QQ<span>.</span></a>
     <p>Designed and built by Qandeel Qudsia.</p>
     <div>
       <a href="https://github.com/Qandeel2006" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.linkedin.com/in/qandeel-qudsia" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://pk.linkedin.com/in/qandeel-qudsia" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:qandeelqudsia@gmail.com">Email</a>
     </div>
   </footer>
 
+  <!-- Friendly portfolio helper -->
+  <aside class="portfolio-helper" aria-label="Qandi, Qandeel's site pet">
+    <div class="helper-panel" id="helper-panel" role="dialog" aria-labelledby="helper-title" aria-hidden="true">
+      <button class="helper-close" type="button" aria-label="Close helper">&times;</button>
+      <img class="helper-avatar" src="assets/qandeel-helper.jpg" alt="Illustrated avatar of Qandeel" width="112" height="112">
+      <div class="helper-copy">
+        <p class="helper-kicker">Hi, I'm Qandi!</p>
+        <h2 id="helper-title">How can I help?</h2>
+        <p>I can point you to my projects, skills, or the best way to get in touch.</p>
+      </div>
+      <div class="helper-actions">
+        <a href="#projects">See my work <span aria-hidden="true">&rarr;</span></a>
+        <a href="#contact">Get in touch <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+    <button class="helper-trigger" type="button" aria-controls="helper-panel" aria-expanded="false" aria-label="Open Qandi, Qandeel's site pet">
+      <span class="helper-trigger-ring" aria-hidden="true"></span>
+      <span class="pet-spark pet-spark-one" aria-hidden="true">✦</span>
+      <span class="pet-spark pet-spark-two" aria-hidden="true">✦</span>
+      <img src="assets/qandeel-helper.jpg" alt="" width="64" height="64">
+      <span class="helper-status" aria-hidden="true"></span>
+      <span class="helper-tooltip" aria-hidden="true">Hi, I'm Qandi!</span>
+    </button>
+  </aside>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.0/dist/hls.min.js"></script>
   <script src="script.js"></script>
 </body>
 
