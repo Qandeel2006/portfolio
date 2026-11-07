@@ -43,6 +43,13 @@ No build step or package installation is required. The site is a static HTML, CS
 The portfolio highlights experience and learning across Python, SQL, Power BI, Tableau, HTML, CSS, JavaScript, Git, and GitHub.
 
 ## Project structure
+- CSS3 (custom properties, responsive layout, animations)
+- Vanilla JavaScript
+- Google Fonts: Manrope and DM Mono
+
+The portfolio highlights experience and learning across Python, SQL, Power BI, Tableau, HTML, CSS, JavaScript, Git, and GitHub.
+
+## Project structure
 
 ```text
 Portfolio/
