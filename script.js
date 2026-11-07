@@ -1,1210 +1,451 @@
-// ============================================================
-// QANDEEL QUDSIA | PORTFOLIO JAVASCRIPT
-// ============================================================
-// This file controls all interactive features of the portfolio.
-//
-// VERSION 1 → Core functionality
-// VERSION 2 → Advanced animations
-// VERSION 3 → Project animations
-// VERSION 4 → Premium navbar
-// VERSION 5 → Theme switcher + Contact form
-//
-// IMPORTANT:
-// The navbar background is NOT controlled by JavaScript.
-// CSS controls the light/dark appearance so the navbar
-// stays consistent with the selected theme.
-// ============================================================
-
-
-
-// ============================================================
-// VERSION 1
-// CORE PORTFOLIO FUNCTIONALITY
-// ============================================================
-
-
-
-// ------------------------------------------------------------
-// 1. TYPING EFFECT
-// ------------------------------------------------------------
-// Creates the animated text in the Hero section.
-// ------------------------------------------------------------
-
-const words = [
-    "Data Science Student",
-    "Aspiring Data Scientist",
-    "Python Developer",
-    "Power BI Enthusiast"
-];
-
-let wordIndex = 0;
-let charIndex = 0;
-let deleting = false;
-
-const typing = document.getElementById("typing");
-
-function typeEffect() {
-
-    // Stop if the typing element does not exist.
-    if (!typing) return;
-
-    const currentWord = words[wordIndex];
-
-    // -------------------------
-    // Typing
-    // -------------------------
-
-    if (!deleting) {
-
-        typing.textContent =
-            currentWord.substring(0, charIndex);
-
-        charIndex++;
-
-        // When the complete word is typed,
-        // pause before deleting.
-        if (charIndex > currentWord.length) {
-
-            deleting = true;
-
-            setTimeout(typeEffect, 1400);
-
-            return;
-        }
-
-    }
-
-    // -------------------------
-    // Deleting
-    // -------------------------
-
-    else {
-
-        typing.textContent =
-            currentWord.substring(0, charIndex);
-
-        charIndex--;
-
-        // When the word disappears,
-        // move to the next word.
-        if (charIndex < 0) {
-
-            deleting = false;
-
-            wordIndex++;
-
-            if (wordIndex >= words.length) {
-
-                wordIndex = 0;
-
-            }
-
-        }
-
-    }
-
-    // Deleting is faster than typing.
-    setTimeout(
-        typeEffect,
-        deleting ? 45 : 90
-    );
-}
-
-typeEffect();
-
-
-
-// ------------------------------------------------------------
-// 2. SECTION REVEAL ANIMATION
-// ------------------------------------------------------------
-// Elements with the "reveal" class become visible when
-// they enter the viewport.
-// ------------------------------------------------------------
-
-const reveals =
-    document.querySelectorAll(".reveal");
-
-function revealSections() {
-
-    const trigger =
-        window.innerHeight * 0.85;
-
-    reveals.forEach(item => {
-
-        const top =
-            item.getBoundingClientRect().top;
-
-        if (top < trigger) {
-
-            item.classList.add("active");
-
-        }
-
-    });
-}
-
-window.addEventListener(
-    "scroll",
-    revealSections
-);
-
-window.addEventListener(
-    "load",
-    revealSections
-);
-
-
-
-// ------------------------------------------------------------
-// 3. MOUSE GLOW
-// ------------------------------------------------------------
-// Moves the purple glow according to the mouse position.
-// ------------------------------------------------------------
-
-const glow =
-    document.getElementById("cursor-glow");
-
-if (glow) {
-
-    document.addEventListener(
-        "mousemove",
-        event => {
-
-            glow.style.left =
-                event.clientX + "px";
-
-            glow.style.top =
-                event.clientY + "px";
-
-        }
-    );
-
-}
-
-
-
-// ------------------------------------------------------------
-// 4. SCROLL PROGRESS BAR
-// ------------------------------------------------------------
-// Shows how far the visitor has scrolled down the page.
-// ------------------------------------------------------------
-
-const progressBar =
-    document.getElementById("progress-bar");
-
+// Portfolio interactions
+// ----------------------
+// This file keeps the page lightweight: there are no frameworks or build
+// tools. Each function below handles one small piece of page behavior.
+
+const progressBar = document.querySelector('#progress-bar');
+const menuButton = document.querySelector('.menu-button');
+const navigationPanel = document.querySelector('.nav-panel');
+const themeButton = document.querySelector('.theme-toggle');
+const helper = document.querySelector('.portfolio-helper');
+const helperTrigger = document.querySelector('.helper-trigger');
+const helperPanel = document.querySelector('.helper-panel');
+const helperClose = document.querySelector('.helper-close');
+const heroVideo = document.querySelector('#hero-video');
+const contactForm = document.querySelector('#contact-form');
+
+// Show the visitor's position on the page in the thin bar at the top.
 function updateScrollProgress() {
+  const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = pageHeight > 0 ? (window.scrollY / pageHeight) * 100 : 0;
 
-    if (!progressBar) return;
-
-    const scrollTop =
-        document.documentElement.scrollTop;
-
-    const scrollHeight =
-        document.documentElement.scrollHeight;
-
-    const clientHeight =
-        document.documentElement.clientHeight;
-
-    const height =
-        scrollHeight - clientHeight;
-
-    // Prevent division by zero.
-    if (height <= 0) {
-
-        progressBar.style.width = "0%";
-
-        return;
-    }
-
-    const width =
-        (scrollTop / height) * 100;
-
-    progressBar.style.width =
-        width + "%";
+  progressBar.style.width = `${progress}%`;
 }
 
-window.addEventListener(
-    "scroll",
-    updateScrollProgress
-);
+// Apply a theme and remember it for the next visit.
+function applyTheme(theme) {
+  const isDarkTheme = theme === 'dark';
 
+  document.body.classList.toggle('dark-theme', isDarkTheme);
+  themeButton.querySelector('span').textContent = isDarkTheme ? '\u263e' : '\u2726';
+  themeButton.setAttribute(
+    'aria-label',
+    isDarkTheme ? 'Switch to light mode' : 'Switch to dark mode'
+  );
 
-
-// ------------------------------------------------------------
-// 5. SMOOTH SCROLL
-// ------------------------------------------------------------
-// Makes navigation links smoothly scroll to sections.
-// ------------------------------------------------------------
-
-document
-    .querySelectorAll('a[href^="#"]')
-    .forEach(link => {
-
-        link.addEventListener(
-            "click",
-            function (event) {
-
-                const targetID =
-                    this.getAttribute("href");
-
-                // Ignore empty "#"
-                if (
-                    !targetID ||
-                    targetID === "#"
-                ) {
-
-                    return;
-                }
-
-                const target =
-                    document.querySelector(targetID);
-
-                if (target) {
-
-                    event.preventDefault();
-
-                    target.scrollIntoView({
-
-                        behavior: "smooth"
-
-                    });
-
-                }
-
-            }
-        );
-
-    });
-
-
-
-// ------------------------------------------------------------
-// 6. ACTIVE NAVBAR LINK
-// ------------------------------------------------------------
-// Highlights the navbar link belonging to the section
-// currently being viewed.
-// ------------------------------------------------------------
-
-const sections =
-    document.querySelectorAll("section");
-
-const navLinks =
-    document.querySelectorAll(".nav-links a");
-
-function updateActiveNavbar() {
-
-    let current = "";
-
-    sections.forEach(section => {
-
-        const sectionTop =
-            section.offsetTop - 200;
-
-        if (
-            window.scrollY >=
-            sectionTop
-        ) {
-
-            current =
-                section.getAttribute("id");
-
-        }
-
-    });
-
-    navLinks.forEach(link => {
-
-        link.classList.remove("active");
-
-        if (
-            link.getAttribute("href") ===
-            "#" + current
-        ) {
-
-            link.classList.add("active");
-
-        }
-
-    });
-
+  localStorage.setItem('portfolio-theme', theme);
 }
 
-window.addEventListener(
-    "scroll",
-    updateActiveNavbar
-);
+const savedTheme = localStorage.getItem('portfolio-theme');
 
-
-
-// ------------------------------------------------------------
-// 7. MOBILE MENU
-// ------------------------------------------------------------
-// Opens and closes the navigation menu on small screens.
-// ------------------------------------------------------------
-
-const menu =
-    document.querySelector(".menu-btn");
-
-const nav =
-    document.querySelector(".nav-links");
-
-if (menu && nav) {
-
-    menu.addEventListener(
-        "click",
-        () => {
-
-            nav.classList.toggle("show");
-
-        }
-    );
-
+if (savedTheme) {
+  applyTheme(savedTheme);
 }
 
+// Use HLS.js where native HLS playback is unavailable, keeping the hero video
+// compatible with Chromium-based browsers as well as Safari.
+if (heroVideo) {
+  const heroVideoSource = heroVideo.dataset.hlsSrc;
 
+  if (window.Hls && window.Hls.isSupported()) {
+    const hls = new window.Hls();
+    hls.loadSource(heroVideoSource);
+    hls.attachMedia(heroVideo);
+  } else if (heroVideo.canPlayType('application/vnd.apple.mpegurl')) {
+    heroVideo.src = heroVideoSource;
+  }
+}
 
-// ------------------------------------------------------------
-// 8. BUTTON HOVER EFFECT
-// ------------------------------------------------------------
-// Adds a small lift effect to the main buttons.
-// ------------------------------------------------------------
+themeButton.addEventListener('click', () => {
+  const nextTheme = document.body.classList.contains('dark-theme')
+    ? 'light'
+    : 'dark';
 
-const buttons =
-    document.querySelectorAll(".btn");
-
-buttons.forEach(button => {
-
-    button.addEventListener(
-        "mouseenter",
-        () => {
-
-            button.style.transform =
-                "translateY(-5px) scale(1.03)";
-
-        }
-    );
-
-    button.addEventListener(
-        "mouseleave",
-        () => {
-
-            button.style.transform =
-                "translateY(0px)";
-
-        }
-    );
-
+  applyTheme(nextTheme);
 });
 
-
-
-// ------------------------------------------------------------
-// 9. FLOATING PROFILE CARD
-// ------------------------------------------------------------
-// Creates a subtle 3D movement when the mouse moves.
-// ------------------------------------------------------------
-
-const profileCard =
-    document.querySelector(".profile-card");
-
-if (profileCard) {
-
-    document.addEventListener(
-        "mousemove",
-        event => {
-
-            const x =
-                (
-                    window.innerWidth / 2 -
-                    event.clientX
-                ) / 35;
-
-            const y =
-                (
-                    window.innerHeight / 2 -
-                    event.clientY
-                ) / 35;
-
-            profileCard.style.transform =
-                `rotateY(${-x}deg) rotateX(${y}deg)`;
-
-        }
-    );
-
-}
-
-
-
-// ------------------------------------------------------------
-// 10. PROFILE CARD RESET
-// ------------------------------------------------------------
-// Returns the profile card to its normal position when
-// the mouse leaves the page.
-// ------------------------------------------------------------
-
-document.addEventListener(
-    "mouseleave",
-    () => {
-
-        if (profileCard) {
-
-            profileCard.style.transform =
-                "rotateX(0deg) rotateY(0deg)";
-
-        }
-
-    }
-);
-
-
-
-// ============================================================
-// VERSION 2
-// ADVANCED ANIMATIONS
-// ============================================================
-
-
-
-// ------------------------------------------------------------
-// 11. COUNTER ANIMATION
-// ------------------------------------------------------------
-// Animates the statistics in the About section.
-// ------------------------------------------------------------
-
-const counters =
-    document.querySelectorAll(".counter");
-
-if ("IntersectionObserver" in window) {
-
-    const counterObserver =
-        new IntersectionObserver(
-
-            (entries, observer) => {
-
-                entries.forEach(entry => {
-
-                    if (!entry.isIntersecting) {
-
-                        return;
-                    }
-
-                    const counter =
-                        entry.target;
-
-                    const target =
-                        Number(
-                            counter.dataset.target
-                        );
-
-                    let count = 0;
-
-                    const speed =
-                        target / 80;
-
-                    function updateCounter() {
-
-                        if (count < target) {
-
-                            count += speed;
-
-                            counter.innerText =
-                                Math.ceil(count);
-
-                            requestAnimationFrame(
-                                updateCounter
-                            );
-
-                        }
-
-                        else {
-
-                            counter.innerText =
-                                target;
-
-                        }
-
-                    }
-
-                    updateCounter();
-
-                    // Prevent the same counter from
-                    // running again.
-                    observer.unobserve(counter);
-
-                });
-
-            },
-
-            {
-                threshold: 0.6
-            }
-
-        );
-
-    counters.forEach(counter => {
-
-        counterObserver.observe(counter);
-
-    });
-
-}
-
-
-
-// ------------------------------------------------------------
-// 12. TIMELINE ANIMATION
-// ------------------------------------------------------------
-// Slides timeline cards into position.
-// ------------------------------------------------------------
-
-const timelineCards =
-    document.querySelectorAll(".timeline-card");
-
-if ("IntersectionObserver" in window) {
-
-    const timelineObserver =
-        new IntersectionObserver(
-
-            entries => {
-
-                entries.forEach(entry => {
-
-                    if (
-                        entry.isIntersecting
-                    ) {
-
-                        entry.target.style.opacity =
-                            "1";
-
-                        entry.target.style.transform =
-                            "translateX(0)";
-
-                    }
-
-                });
-
-            },
-
-            {
-                threshold: 0.3
-            }
-
-        );
-
-    timelineCards.forEach(card => {
-
-        card.style.opacity = "0";
-
-        card.style.transform =
-            "translateX(80px)";
-
-        card.style.transition =
-            ".8s ease";
-
-        timelineObserver.observe(card);
-
-    });
-
-}
-
-
-
-// ------------------------------------------------------------
-// 13. SKILL CARD 3D HOVER
-// ------------------------------------------------------------
-// Tilts skill cards according to mouse position.
-// ------------------------------------------------------------
-
-const skillCards =
-    document.querySelectorAll(".skill-card");
-
-skillCards.forEach(card => {
-
-    card.addEventListener(
-        "mousemove",
-        event => {
-
-            const rect =
-                card.getBoundingClientRect();
-
-            const x =
-                event.clientX - rect.left;
-
-            const y =
-                event.clientY - rect.top;
-
-            const rotateX =
-                (y - rect.height / 2) / 18;
-
-            const rotateY =
-                (rect.width / 2 - x) / 18;
-
-            card.style.transform =
-                `perspective(800px)
-                 rotateX(${rotateX}deg)
-                 rotateY(${rotateY}deg)
-                 translateY(-10px)`;
-
-        }
-    );
-
-    card.addEventListener(
-        "mouseleave",
-        () => {
-
-            card.style.transform =
-                "perspective(800px) rotateX(0deg) rotateY(0deg)";
-
-        }
-    );
-
+// Open and close the mobile navigation.
+menuButton.addEventListener('click', () => {
+  const isOpen = navigationPanel.classList.toggle('open');
+
+  menuButton.setAttribute('aria-expanded', String(isOpen));
+  menuButton.querySelector('.sr-only').textContent = isOpen
+    ? 'Close menu'
+    : 'Open menu';
 });
 
-
-
-// ------------------------------------------------------------
-// 14. STAGGER REVEAL
-// ------------------------------------------------------------
-// Gives cards a slightly different entrance delay.
-// ------------------------------------------------------------
-
-const revealItems =
-    document.querySelectorAll(
-        ".glass-card, .stat-card, .timeline-item, .skill-card"
-    );
-
-if ("IntersectionObserver" in window) {
-
-    const staggerObserver =
-        new IntersectionObserver(
-
-            entries => {
-
-                entries.forEach(entry => {
-
-                    if (
-                        entry.isIntersecting
-                    ) {
-
-                        entry.target.classList.add(
-                            "show-item"
-                        );
-
-                    }
-
-                });
-
-            },
-
-            {
-                threshold: 0.2
-            }
-
-        );
-
-    revealItems.forEach((item, index) => {
-
-        item.style.opacity = "0";
-
-        item.style.transform =
-            "translateY(60px)";
-
-        item.style.transition =
-            `.7s ease ${index * 0.08}s`;
-
-        staggerObserver.observe(item);
-
-    });
-
+function closeMenu() {
+  navigationPanel.classList.remove('open');
+  menuButton.setAttribute('aria-expanded', 'false');
+  menuButton.querySelector('.sr-only').textContent = 'Open menu';
 }
 
-
-
-// ------------------------------------------------------------
-// 15. FLOATING BACKGROUND BLOBS
-// ------------------------------------------------------------
-// Adds subtle random movement to the background blobs.
-// ------------------------------------------------------------
-
-document
-    .querySelectorAll(".blob")
-    .forEach(blob => {
-
-        let x = 0;
-        let y = 0;
-
-        setInterval(() => {
-
-            x += Math.random() * 6 - 3;
-            y += Math.random() * 6 - 3;
-
-            blob.style.transform =
-                `translate(${x}px, ${y}px)`;
-
-        }, 80);
-
-    });
-
-
-
-// ============================================================
-// VERSION 3
-// PROJECT SECTION
-// ============================================================
-
-
-
-// ------------------------------------------------------------
-// 16. PROJECT CARD SCROLL ANIMATION
-// ------------------------------------------------------------
-// Project cards appear with a smooth upward animation.
-// ------------------------------------------------------------
-
-const projectCards =
-    document.querySelectorAll(".project-card");
-
-if ("IntersectionObserver" in window) {
-
-    const projectObserver =
-        new IntersectionObserver(
-
-            entries => {
-
-                entries.forEach(entry => {
-
-                    if (
-                        entry.isIntersecting
-                    ) {
-
-                        entry.target.style.opacity =
-                            "1";
-
-                        entry.target.style.transform =
-                            "translateY(0) scale(1)";
-
-                    }
-
-                });
-
-            },
-
-            {
-                threshold: 0.2
-            }
-
-        );
-
-    projectCards.forEach((card, index) => {
-
-        card.style.opacity = "0";
-
-        card.style.transform =
-            "translateY(80px) scale(.95)";
-
-        card.style.transition =
-            `all .8s ease ${index * 0.2}s`;
-
-        projectObserver.observe(card);
-
-    });
-
+// Open and close the small on-page helper without interrupting navigation.
+function setHelperState(isOpen) {
+  helper.classList.toggle('is-open', isOpen);
+  helperTrigger.setAttribute('aria-expanded', String(isOpen));
+  helperPanel.setAttribute('aria-hidden', String(!isOpen));
+  if (isOpen) positionHelperPanel();
 }
 
-
-
-// ------------------------------------------------------------
-// 17. PROJECT IMAGE HOVER
-// ------------------------------------------------------------
-// Adds a subtle 3D movement to project images.
-// ------------------------------------------------------------
-
-document
-    .querySelectorAll(".project-image img")
-    .forEach(image => {
-
-        image.addEventListener(
-            "mousemove",
-            event => {
-
-                const rect =
-                    image.getBoundingClientRect();
-
-                const x =
-                    (
-                        (event.clientX - rect.left) /
-                        rect.width -
-                        0.5
-                    ) * 10;
-
-                const y =
-                    (
-                        (event.clientY - rect.top) /
-                        rect.height -
-                        0.5
-                    ) * 10;
-
-                image.style.transform =
-                    `scale(1.1)
-                     rotateX(${-y}deg)
-                     rotateY(${x}deg)`;
-
-            }
-        );
-
-        image.addEventListener(
-            "mouseleave",
-            () => {
-
-                image.style.transform =
-                    "scale(1) rotateX(0) rotateY(0)";
-
-            }
-        );
-
-    });
-
-
-
-// ------------------------------------------------------------
-// 18. PROJECT TECHNOLOGY TAGS
-// ------------------------------------------------------------
-// Adds a small hover animation to technology tags.
-// ------------------------------------------------------------
-
-document
-    .querySelectorAll(".project-tags span")
-    .forEach(tag => {
-
-        tag.addEventListener(
-            "mouseenter",
-            () => {
-
-                tag.style.transform =
-                    "translateY(-4px) scale(1.08)";
-
-            }
-        );
-
-        tag.addEventListener(
-            "mouseleave",
-            () => {
-
-                tag.style.transform =
-                    "translateY(0) scale(1)";
-
-            }
-        );
-
-    });
-
-
-
-// ------------------------------------------------------------
-// 19. COMING SOON PROGRESS ANIMATION
-// ------------------------------------------------------------
-// Animates the progress bar in the Portfolio Website
-// "Coming Soon" card.
-// ------------------------------------------------------------
-
-const progressFill =
-    document.querySelector(".progress-fill");
-
-if (progressFill) {
-
-    let progress = 55;
-
-    setInterval(() => {
-
-        progress++;
-
-        if (progress > 72) {
-
-            progress = 55;
-
-        }
-
-        progressFill.style.width =
-            progress + "%";
-
-    }, 120);
-
-}
-
-
-
-// ------------------------------------------------------------
-// 20. PROJECT BUTTON RIPPLE EFFECT
-// ------------------------------------------------------------
-// Creates a ripple effect when GitHub or Preview buttons
-// are clicked.
-// ------------------------------------------------------------
-
-document
-    .querySelectorAll(".project-buttons a")
-    .forEach(button => {
-
-        button.addEventListener(
-            "click",
-            function (event) {
-
-                const ripple =
-                    document.createElement("span");
-
-                const rect =
-                    this.getBoundingClientRect();
-
-                ripple.style.position =
-                    "absolute";
-
-                ripple.style.left =
-                    (event.clientX - rect.left) +
-                    "px";
-
-                ripple.style.top =
-                    (event.clientY - rect.top) +
-                    "px";
-
-                ripple.style.width =
-                    "10px";
-
-                ripple.style.height =
-                    "10px";
-
-                ripple.style.background =
-                    "rgba(255,255,255,.5)";
-
-                ripple.style.borderRadius =
-                    "50%";
-
-                ripple.style.transform =
-                    "translate(-50%,-50%)";
-
-                ripple.style.animation =
-                    "ripple .6s ease-out";
-
-                this.appendChild(ripple);
-
-                setTimeout(
-                    () => ripple.remove(),
-                    600
-                );
-
-            }
-        );
-
-    });
-
-
-
-// ============================================================
-// VERSION 4
-// PREMIUM NAVBAR
-// ============================================================
-// IMPORTANT:
-// JavaScript ONLY changes navbar size and shadow.
-//
-// It does NOT change the navbar background.
-//
-// This allows CSS to control the light/dark theme correctly.
-// ============================================================
-
-const navBar =
-    document.querySelector(".navbar");
-
-function updatePremiumNavbar() {
-
-    if (!navBar) return;
-
-    if (window.scrollY > 60) {
-
-        // Make navbar slightly smaller while scrolling.
-        navBar.style.padding =
-            "12px 28px";
-
-        // Add a soft shadow.
-        navBar.style.boxShadow =
-            "0 20px 50px rgba(0,0,0,.25)";
-
-    }
-
-    else {
-
-        // Return navbar to original size.
-        navBar.style.padding =
-            "16px 32px";
-
-        // Remove shadow.
-        navBar.style.boxShadow =
-            "none";
-
-    }
-
-}
-
-// Only ONE scroll listener.
-window.addEventListener(
-    "scroll",
-    updatePremiumNavbar
-);
-
-
-
-// ============================================================
-// VERSION 5
-// THEME SWITCHER
-// ============================================================
-// Saves the selected theme in localStorage so the user's
-// choice remains after refreshing the page.
-// ============================================================
-
-const themeToggle =
-    document.getElementById("theme-toggle");
-
-function applySavedTheme() {
-
-    if (!themeToggle) return;
-
-    const savedTheme =
-        localStorage.getItem("portfolio-theme");
-
-    if (savedTheme === "light") {
-
-        document.body.classList.add(
-            "light-theme"
-        );
-
-        themeToggle.textContent =
-            "🌙";
-
-    }
-
-    else {
-
-        document.body.classList.remove(
-            "light-theme"
-        );
-
-        themeToggle.textContent =
-            "☀️";
-
-    }
-
-}
-
-applySavedTheme();
-
-
-
-// ------------------------------------------------------------
-// Theme button click
-// ------------------------------------------------------------
-
-if (themeToggle) {
-
-    themeToggle.addEventListener(
-        "click",
-        () => {
-
-            document.body.classList.toggle(
-                "light-theme"
-            );
-
-            const isLight =
-                document.body.classList.contains(
-                    "light-theme"
-                );
-
-            // Change the icon.
-            themeToggle.textContent =
-                isLight ? "🌙" : "☀️";
-
-            // Remember the user's choice.
-            localStorage.setItem(
-                "portfolio-theme",
-                isLight ? "light" : "dark"
-            );
-
-        }
-    );
-
-}
-
-
-
-// ============================================================
-// CONTACT FORM
-// ============================================================
-// Prevents the form from trying to reload the local HTML file.
-//
-// NOTE:
-// This currently displays a success message only.
-// It does NOT send an email yet.
-// ============================================================
-
-const contactForm =
-    document.getElementById("contact-form");
+helperTrigger.addEventListener('click', () => {
+  setHelperState(!helper.classList.contains('is-open'));
+});
+
+helperClose.addEventListener('click', () => setHelperState(false));
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && helper.classList.contains('is-open')) {
+    setHelperState(false);
+    helperTrigger.focus();
+  }
+  if (event.key === 'Escape' && navigationPanel.classList.contains('open')) {
+    closeMenu();
+    menuButton.focus();
+  }
+});
+
+document.addEventListener('click', (event) => {
+  if (helper.classList.contains('is-open') && !helper.contains(event.target)) {
+    setHelperState(false);
+  }
+});
+
+document.querySelectorAll('.helper-actions a').forEach((link) => {
+  link.addEventListener('click', () => setHelperState(false));
+});
+
+// Close the mobile navigation after choosing a section.
+document.querySelectorAll('.nav-links a').forEach((link) => {
+  link.addEventListener('click', () => {
+    closeMenu();
+  });
+});
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 680) closeMenu();
+});
+
+// Contact form
+// ------------
+// Messages are sent straight to Qandeel's inbox through FormSubmit (a free
+// form-to-email service), so visitors do not need an email app. If sending
+// fails, the form falls back to opening the visitor's email app.
+const CONTACT_EMAIL = 'qandeelqudsia@gmail.com';
+const FORM_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
 
 if (contactForm) {
+  const nameInput = contactForm.querySelector('#contact-name');
+  const emailInput = contactForm.querySelector('#contact-email');
+  const messageInput = contactForm.querySelector('#contact-message');
+  const honeypot = contactForm.querySelector('#contact-company');
+  const nameError = contactForm.querySelector('#contact-name-error');
+  const emailError = contactForm.querySelector('#contact-email-error');
+  const messageError = contactForm.querySelector('#contact-message-error');
+  const formStatus = contactForm.querySelector('#contact-form-status');
+  const submitButton = contactForm.querySelector('button[type="submit"]');
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    contactForm.addEventListener(
-        "submit",
-        function (event) {
+  function showFormError(input, errorElement, message) {
+    input.setAttribute('aria-invalid', String(Boolean(message)));
+    errorElement.textContent = message;
+    errorElement.hidden = !message;
+  }
 
-            // Stop the browser's normal form submission.
-            event.preventDefault();
+  function setFormStatus(message, type) {
+    formStatus.textContent = message;
+    formStatus.classList.toggle('is-success', type === 'success');
+    formStatus.classList.toggle('is-error', type === 'error');
+  }
 
-            alert(
-                "Thank you! Your message has been received. 🚀"
-            );
+  function openEmailApp(name, message) {
+    const subject = encodeURIComponent(`Portfolio message from ${name}`);
+    const body = encodeURIComponent(`Hi Qandeel,\n\n${message}\n\nFrom,\n${name}`);
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+  }
 
-            // Clear the form.
-            contactForm.reset();
+  contactForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-        }
-    );
+    // Bots fill hidden fields; pretend it worked and stop.
+    if (honeypot && honeypot.value) return;
 
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const message = messageInput.value.trim();
+    const nameMessage = name.length < 2 ? 'Please enter your name.' : '';
+    const emailMessage = emailPattern.test(email) ? '' : 'Please enter a valid email address.';
+    const messageMessage = message.length < 10 ? 'Please write a message of at least 10 characters.' : '';
+
+    showFormError(nameInput, nameError, nameMessage);
+    showFormError(emailInput, emailError, emailMessage);
+    showFormError(messageInput, messageError, messageMessage);
+    setFormStatus('', '');
+
+    if (nameMessage || emailMessage || messageMessage) return;
+
+    submitButton.disabled = true;
+    setFormStatus('Sending your message...', '');
+
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          _subject: `Portfolio message from ${name}`,
+          _template: 'table',
+          _captcha: 'false'
+        })
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || result.success === false || result.success === 'false') {
+        throw new Error(result.message || 'Message could not be sent.');
+      }
+
+      contactForm.reset();
+      setFormStatus('Thank you! Your message was sent. I will reply soon.', 'success');
+      petSay('Message sent! \u{1F389}', 4500);
+    } catch (error) {
+      setFormStatus('Could not send it right now. Opening your email app instead.', 'error');
+      openEmailApp(name, message);
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
 }
 
+// Fade sections into view as they enter the viewport.
+const revealObserver = new IntersectionObserver(
+  (entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
 
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    });
+  },
+  { threshold: 0.12 }
+);
 
-// ============================================================
-// INITIAL SETUP
-// ============================================================
-// Runs important functions immediately when the page loads.
-// ============================================================
+document.querySelectorAll('.reveal').forEach((element) => {
+  revealObserver.observe(element);
+});
 
-window.addEventListener(
-    "load",
-    () => {
+window.addEventListener('scroll', updateScrollProgress, { passive: true });
+updateScrollProgress();
 
-        revealSections();
+// Screen pet
+// ----------
+// Qandi walks along the bottom of the page, naps when nobody is around,
+// comments on sections as you scroll, and hops and opens a panel when clicked.
+const petBubble = helper.querySelector('.pet-bubble');
+const petReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const petSpeed = 48; // pixels per second
+const petMargin = 12;
+const petSaid = new Set();
+const petState = {
+  x: 0,
+  target: 0,
+  facing: 1,
+  mode: 'idle',
+  idleUntil: 0,
+  lastActive: Date.now(),
+  hovering: false,
+  bubbleTimer: null,
+  lastFrame: 0
+};
 
-        updateScrollProgress();
+function petViewWidth() {
+  return document.documentElement.clientWidth;
+}
 
-        updateActiveNavbar();
+function petMaxX() {
+  return Math.max(petMargin, petViewWidth() - helper.offsetWidth - petMargin);
+}
 
-        updatePremiumNavbar();
+// Keep a bubble or panel fully on screen while the pet moves.
+function petFit(element) {
+  const width = element.offsetWidth;
+  const center = petState.x + helper.offsetWidth / 2;
+  const left = Math.min(Math.max(center - width / 2, 8), petViewWidth() - width - 8);
 
+  element.style.right = 'auto';
+  element.style.left = `${left - petState.x}px`;
+}
+
+function positionHelperPanel() {
+  petBubble.classList.remove('show');
+  petFit(helperPanel);
+}
+
+function setPetMode(mode) {
+  petState.mode = mode;
+  helper.classList.toggle('is-walking', mode === 'walk');
+  helper.classList.toggle('is-sleeping', mode === 'sleep');
+}
+
+function petSay(text, duration = 3800) {
+  if (helper.classList.contains('is-open')) return;
+
+  petBubble.textContent = text;
+  petBubble.classList.add('show');
+  petFit(petBubble);
+
+  clearTimeout(petState.bubbleTimer);
+  petState.bubbleTimer = setTimeout(() => petBubble.classList.remove('show'), duration);
+}
+
+function wakePet() {
+  petState.lastActive = Date.now();
+
+  if (petState.mode === 'sleep') {
+    setPetMode('idle');
+    petState.idleUntil = Date.now() + 1500;
+    petSay('Oh, hi! \u{1F44B}', 2500);
+  }
+}
+
+function choosePetAction(now) {
+  if (now - petState.lastActive > 30000) {
+    setPetMode('sleep');
+    return;
+  }
+
+  if (Math.random() < 0.6) {
+    const max = petMaxX();
+    let target = petMargin + Math.random() * (max - petMargin);
+
+    // Make sure each walk is long enough to be worth it.
+    if (Math.abs(target - petState.x) < 90) {
+      target = petState.x < max / 2 ? max - Math.random() * 100 : petMargin + Math.random() * 100;
     }
+
+    petState.target = Math.min(Math.max(target, petMargin), max);
+    petState.facing = petState.target >= petState.x ? 1 : -1;
+    setPetMode('walk');
+  } else {
+    petState.idleUntil = now + 2000 + Math.random() * 3500;
+  }
+}
+
+function renderPet() {
+  helper.style.transform = `translateX(${petState.x.toFixed(1)}px)`;
+  helper.classList.toggle('is-facing-left', petState.facing < 0);
+
+  if (petBubble.classList.contains('show')) petFit(petBubble);
+  if (helper.classList.contains('is-open')) petFit(helperPanel);
+}
+
+function petFrame(timestamp) {
+  const dt = Math.min((timestamp - petState.lastFrame) / 1000, 0.05);
+  const now = Date.now();
+  petState.lastFrame = timestamp;
+
+  const busy = helper.classList.contains('is-open') || petState.hovering;
+
+  if (busy) {
+    // Stand still while someone is clicking or hovering over the pet.
+    if (petState.mode === 'walk') {
+      setPetMode('idle');
+      petState.idleUntil = now + 1500;
+    }
+  } else if (petState.mode === 'walk') {
+    const distance = petState.target - petState.x;
+    const step = petSpeed * dt;
+
+    if (Math.abs(distance) <= step) {
+      petState.x = petState.target;
+      setPetMode('idle');
+      petState.idleUntil = now + 1500 + Math.random() * 3000;
+    } else {
+      petState.x += Math.sign(distance) * step;
+    }
+  } else if (petState.mode === 'idle' && now >= petState.idleUntil) {
+    choosePetAction(now);
+  }
+
+  petState.x = Math.min(Math.max(petState.x, petMargin), petMaxX());
+  renderPet();
+  requestAnimationFrame(petFrame);
+}
+
+// Start in the bottom-right corner, then wander.
+petState.x = petMaxX();
+petState.target = petState.x;
+renderPet();
+
+if (!petReducedMotion) {
+  petState.idleUntil = Date.now() + 3000;
+  requestAnimationFrame(petFrame);
+  setTimeout(() => petSay("Hi, I'm Qandi! Click me \u{1F43E}", 4500), 1800);
+}
+
+// Clicking the pet: a little hop, and it wakes up.
+helperTrigger.addEventListener('click', () => {
+  helper.classList.add('is-hopping');
+  setTimeout(() => helper.classList.remove('is-hopping'), 600);
+
+  petState.lastActive = Date.now();
+  if (petState.mode === 'sleep') setPetMode('idle');
+  if (helper.classList.contains('is-open')) petBubble.classList.remove('show');
+});
+
+helperTrigger.addEventListener('pointerenter', () => {
+  petState.hovering = true;
+  wakePet();
+});
+helperTrigger.addEventListener('pointerleave', () => {
+  petState.hovering = false;
+});
+helperTrigger.addEventListener('focus', () => {
+  petState.hovering = true;
+});
+helperTrigger.addEventListener('blur', () => {
+  petState.hovering = false;
+});
+
+// Any activity on the page keeps the pet awake.
+['pointerdown', 'keydown', 'scroll'].forEach((type) => {
+  window.addEventListener(type, wakePet, { passive: true });
+});
+
+window.addEventListener('resize', () => {
+  const max = petMaxX();
+
+  petState.x = Math.min(petState.x, max);
+  petState.target = Math.min(petState.target, max);
+  renderPet();
+});
+
+// The pet comments on each section the first time you reach it.
+const petSectionLines = {
+  about: 'That is Qandeel! Nice to meet you.',
+  skills: 'Python, SQL, Power BI... lots to explore.',
+  projects: 'These dashboards are my favourites!',
+  learning: 'Always learning something new.',
+  certificates: 'So many certificates!',
+  contact: 'Say hi! Your message goes straight to my inbox.'
+};
+
+const petSectionObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      const id = entry.target.id;
+
+      if (!entry.isIntersecting || petSaid.has(id) || !petSectionLines[id]) return;
+      petSaid.add(id);
+
+      if (petState.mode !== 'sleep') petSay(petSectionLines[id]);
+    });
+  },
+  { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
 );
 
-
-
-// ============================================================
-// CONSOLE MESSAGES
-// ============================================================
-
-console.log(
-    "%cWelcome Qandeel 👋",
-    "color:#22d3ee;font-size:22px;font-weight:bold;"
-);
-
-console.log(
-    "%cPortfolio JavaScript Loaded Successfully 🚀",
-    "color:#22d3ee;font-size:20px;font-weight:bold;"
-);
-
-console.log(
-    "%cVersions 1 → 5 Active ✅",
-    "color:#8B5CF6;font-size:16px;font-weight:bold;"
-);
+Object.keys(petSectionLines).forEach((id) => {
+  const section = document.getElementById(id);
+  if (section) petSectionObserver.observe(section);
+});

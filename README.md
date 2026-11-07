@@ -1,83 +1,78 @@
-# Build-initial-portfolio-website
-Build initial portfolio website with animations and project sections
-# 🌐 Qandeel Qudsia | Personal Portfolio
+# Qandeel Qudsia - Portfolio
 
-Welcome to my personal portfolio website!
+Personal portfolio for Qandeel Qudsia, a data science student interested in data analytics, dashboard design, and frontend development.
 
-This project showcases my journey as a Data Science student, my technical skills, projects, and the technologies I am currently learning.
+The site presents selected dashboard projects, current learning goals, technical skills, and ways to get in touch.
 
-The website was built from scratch using HTML, CSS, and JavaScript while practicing web development, Git, and GitHub.
+## Live preview
 
----
+Open `index.html` directly in a browser, or serve the folder locally:
 
-## 🚀 About the Project
+```bash
+npx serve .
+```
 
-This portfolio is designed to present:
+No build step or package installation is required. The site is a static HTML, CSS, and JavaScript project.
 
-- 👩‍💻 About Me
-- 🎓 Education & Learning Journey
-- 🛠️ Technical Skills
-- 📊 Featured Projects
-- 📚 Currently Learning
-- 📄 Resume
-- 🔗 GitHub projects
+## Highlights
 
-The goal of this project is not only to create a professional portfolio but also to continuously improve my frontend development and software engineering skills.
+- Responsive claymorphism portfolio layout
+- Warm-peach light mode and lavender dark mode with saved preference
+- Mobile navigation with accessible menu controls
+- Scroll progress indicator and reduced-motion support
+- Hero profile section with internship availability status
+- Cinematic HLS-video hero background with graceful native/HLS.js playback support
+- "Qandi" screen pet that walks along the page, naps when idle, comments on sections, and opens a help panel when clicked
+- Mobile-safe navigation, custom favicon, and a GitHub Pages-ready 404 page
+- Optimized JPG dashboard and helper images for faster page loads
+- Featured Power BI and Tableau dashboard projects
+- Certificate gallery for Power BI and C++ learning milestones
+- Validated contact form that emails messages straight to the inbox via FormSubmit (falls back to the visitor's email app)
+- Skills and learning sections with clear progress indicators
+- Direct email and LinkedIn contact actions
+- Resume link and GitHub project links
+- Semantic HTML, descriptive image alt text, and skip-to-content navigation
 
----
+## Built with
 
-## 🛠️ Technologies Used
-
-### Frontend
 - HTML5
-- CSS3
-- JavaScript
+- CSS3 (custom properties, responsive layout, animations)
+- Vanilla JavaScript
+- Google Fonts: Manrope and DM Mono
 
-### Tools
-- Visual Studio Code
-- Git
-- GitHub
+The portfolio highlights experience and learning across Python, SQL, Power BI, Tableau, HTML, CSS, JavaScript, Git, and GitHub.
 
-### Data & Analytics
-- Python
-- SQL
-- Power BI
-- Tableau
-
----
-
-## ✨ Features
-
-- 🎨 Modern dark-themed UI
-- 📱 Responsive design
-- ✨ Animated hero section
-- ⌨️ Typing text animation
-- 🖱️ Interactive cursor glow
-- 📊 Scroll progress indicator
-- 🔄 Scroll reveal animations
-- 🔢 Animated statistics counters
-- 🎓 Animated learning timeline
-- 🛠️ Interactive skill cards
-- 📁 Project showcase
-- 📈 Learning progress bars
-- 📄 Resume download
-- 📱 Responsive navigation
-
----
-
-## 📂 Project Structure
+## Project structure
 
 ```text
 Portfolio/
-│
-├── index.html
-├── styles.css
-├── script.js
-│
-├── assets/
-│   ├── profile.png
-│   ├── sales-dashboard.png
-│   ├── hr-dashboard.png
-|   └── resume
-│
-└── README.md
+|-- index.html                 # Page content and portfolio sections
+|-- 404.html                   # Custom GitHub Pages fallback page
+|-- styles.css                 # Theme, layout, responsive styles
+|-- script.js                  # Theme, menu, reveal, and scroll interactions
+|-- assets/
+|   |-- profile.jpeg            # Profile image
+|   |-- favicon.svg             # Browser tab icon
+|   |-- qandeel-helper.jpg      # Optimized illustrated helper avatar
+|   |-- sales-dashboard.jpg     # Optimized sales dashboard preview
+|   |-- hr-dashboard.jpg        # Optimized HR dashboard preview
+|   |-- resume.pdf              # Downloadable resume
+`-- README.md
+```
+
+## Contact form setup
+
+The form posts to [FormSubmit](https://formsubmit.co). The first time anyone submits it from the live site, FormSubmit emails you an activation link - click it once and every later message arrives in your inbox. Check spam if it does not show up. The form needs the site to be served over http(s), such as GitHub Pages; it will not send from a file opened directly in the browser.
+
+## Customization
+
+1. Update personal copy, links, and project details in `index.html`.
+2. Replace the files in `assets/` with updated images or a resume when needed.
+3. Adjust colors and spacing through the variables at the top of `styles.css`.
+4. Update theme and mobile-menu behavior in `script.js`.
+
+## Contact
+
+- Email: [qandeelqudsia@gmail.com](mailto:qandeelqudsia@gmail.com)
+- GitHub: [github.com/Qandeel2006](https://github.com/Qandeel2006)
+- LinkedIn: [linkedin.com/in/qandeel-qudsia](https://www.linkedin.com/in/qandeel-qudsia)

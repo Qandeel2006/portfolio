@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realistic Avatar Animation Sequence</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2c3e50, #1a1a2e);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Container & Stage Setup */
+        .stage-wrapper {
+            position: relative;
+            width: 800px;
+            height: 450px;
+            background: radial-gradient(circle at center, #3a4a58 0%, #1c2530 100%);
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        /* Ground line & shadow floor */
+        .ground {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Dynamic Shadow beneath avatar */
+        .shadow {
+            position: absolute;
+            bottom: 34px;
+            width: 90px;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 50%;
+            filter: blur(4px);
+            transition: left 0.05s linear, transform 0.2s ease;
+        }
+
+        /* Character Sprite Box */
+        .avatar {
+            position: absolute;
+            bottom: 38px;
+            width: 120px;
+            height: 240px;
+            background-image: url('avatar.jpg');
+            background-repeat: no-repeat;
+            /* 10 columns by 4 rows grid based on your sprite sheet layout */
+            background-size: 1000% 400%; 
+            transform-origin: bottom center;
+            transition: left 0.05s linear;
+        }
+
+        /* Natural walking bounce effect */
+        .bouncing {
+            animation: humanBounce 0.35s ease-in-out infinite alternate;
+        }
+
+        @keyframes humanBounce {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-6px); }
+        }
+
+        /* Control Panel */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        button {
+            background: #e94560;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        button:hover {
+            background: #ff5f7e;
+            transform: translateY(-2px);
+        }
+
+        .status-badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #4ecca3;
+            border: 1px solid rgba(78, 204, 163, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stage-wrapper">
+        <div class="ground"></div>
+        <div class="shadow" id="avatarShadow"></div>
+        <div class="avatar bouncing" id="avatar"></div>
+    </div>
+
+    <div class="controls">
+        <button id="playBtn" onclick="toggleAnimation()">Pause Sequence</button>
+        <div class="status-badge" id="statusText">State: Front Standing</div>
+    </div>
+
+    <script>
+        const avatar = document.getElementById('avatar');
+        const shadow = document.getElementById('avatarShadow');
+        const statusText = document.getElementById('statusText');
+        const playBtn = document.getElementById('playBtn');
+
+        let isRunning = true;
+        let posX = 340; // Center position (stage width 800 - avatar 120 / 2)
+        let stateIndex = 0;
+        let frameCounter = 0;
+
+        // Grid coordinates (col 0-9, row 0-3) mapped to your generated sprite sheet
+        // Row 0: Front stand & Walk Right sequence (Cols 0-9)
+        // Row 1: Walk Left sequence (Cols 0-9)
+        // Row 2: Peace sign, Thumbs Up, Waving series (Cols 0-9)
+        // Row 3: Sitting & Standing poses (Cols 0-9)
+        
+        const walkRightFrames = [
+            {col: 1, row: 0}, {col: 2, row: 0}, {col: 3, row: 0}, {col: 4, row: 0},
+            {col: 5, row: 0}, {col: 6, row: 0}, {col: 7, row: 0}, {col: 8, row: 0}
+        ];
+
+        const walkLeftFrames = [
+            {col: 1, row: 1}, {col: 2, row: 1}, {col: 3, row: 1}, {col: 4, row: 1},
+            {col: 5, row: 1}, {col: 6, row: 1}, {col: 7, row: 1}, {col: 8, row: 1}
+        ];
+
+        const waveFrames = [
+            {col: 3, row: 2}, {col: 4, row: 2}, {col: 5, row: 2}, 
+            {col: 6, row: 2}, {col: 7, row: 2}, {col: 8, row: 2}
+        ];
+
+        const sittingSequence = [
+            {col: 0, row: 3, label: "Basic Sitting"},
+            {col: 1, row: 3, label: "Crossed Legs Sitting"},
+            {col: 2, row: 3, label: "Arm on Knee Pose"},
+            {col: 3, row: 3, label: "Pensive Sit"},
+            {col: 7, row: 3, label: "'Sit & Think' Pose"},
+            {col: 9, row: 3, label: "Standing Back Up"}
+        ];
+
+        function setFrame(col, row) {
+            // Converts column/row indexes into background percentages
+            const xPercent = (col / 9) * 100;
+            const yPercent = (row / 3) * 100;
+            avatar.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
+        }
+
+        function updatePosition(x) {
+            posX = x;
+            avatar.style.left = `${posX}px`;
+            shadow.style.left = `${posX + 15}px`;
+        }
+
+        // Master Animation Sequence Engine
+        async function runSequence() {
+            while (true) {
+                if (!isRunning) {
+                    await new Promise(r => setTimeout(r, 200));
+                    continue;
+                }
+
+                // --- 1. FRONT STANDING NEUTRAL ---
+                statusText.innerText = "State: Neutral Standing";
+                avatar.classList.remove('bouncing');
+                setFrame(0, 0);
+                updatePosition(340);
+                await sleep(1500);
+
+                // --- 2. WALK RIGHT ---
+                statusText.innerText = "State: Walking Right";
+                avatar.classList.add('bouncing');
+                for (let i = 0; i < 16; i++) {
+                    const f = walkRightFrames[i % walkRightFrames.length];
+                    setFrame(f.col, f.row);
+                    updatePosition(posX + 10);
+                    await sleep(100);
+                }
+
+                // --- 3. PAUSE & NEUTRAL STOP ---
+                statusText.innerText = "State: Paused / Looking";
+                avatar.classList.remove('bouncing');
+                setFrame(9, 0);
+                await sleep(1000);
+
+                // --- 4. WALK LEFT ---
+                statusText.innerText = "State: Walking Left";
+                avatar.classList.add('bouncing');
+                for (let i = 0; i < 16; i++) {
+                    const f = walkLeftFrames[i % walkLeftFrames.length];
+                    setFrame(f.col, f.row);
+                    updatePosition(posX - 10);
+                    await sleep(100);
+                }
+
+                // --- 5. STOP & PEACE SIGN ---
+                statusText.innerText = "State: Cute Peace Sign";
+                avatar.classList.remove('bouncing');
+                setFrame(1, 2);
+                await sleep(1500);
+
+                // --- 6. THUMBS UP ---
+                statusText.innerText = "State: Thumbs Up Pose";
+                setFrame(2, 2);
+                await sleep(1500);
+
+                // --- 7. FULL WAVING SERIES ---
+                statusText.innerText = "State: Full Waving Series";
+                for (let cycles = 0; cycles < 2; cycles++) {
+                    for (let f of waveFrames) {
+                        setFrame(f.col, f.row);
+                        await sleep(120);
+                    }
+                }
+
+                // --- 8. SITTING POSES SERIES ---
+                avatar.classList.remove('bouncing');
+                for (let step of sittingSequence) {
+                    statusText.innerText = `State: ${step.label}`;
+                    setFrame(step.col, step.row);
+                    await sleep(1400);
+                }
+
+                await sleep(1000);
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function toggleAnimation() {
+            isRunning = !isRunning;
+            playBtn.innerText = isRunning ? "Pause Sequence" : "Resume Sequence";
+        }
+
+        // Initialize setup
+        updatePosition(340);
+        runSequence();
+    </script>
+</body>
+</html>
