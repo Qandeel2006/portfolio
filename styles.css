@@ -155,7 +155,6 @@ button {
 }
 .logo span {
   color:var(--accent);
-  color:var(--accent);
 }
 .nav-panel {
   display:flex;
@@ -592,10 +591,6 @@ em {
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:1.5rem;
 }
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:1.5rem;
-}
 .project-card {
   overflow:hidden;
   border:0;
@@ -609,12 +604,6 @@ em {
   box-shadow:var(--shadow),0 0 0 2px color-mix(in srgb,var(--accent) 48%,transparent);
 }
 .project-image {
-  position:relative;
-  display:block;
-  overflow:hidden;
-  aspect-ratio:1.5;
-  background:var(--surface-soft);
-}
   position:relative;
   display:block;
   overflow:hidden;
@@ -686,74 +675,7 @@ em {
   font-size:.78rem;
 }
 /* Learning cards */
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  transition:transform .45s;
-}
-.project-card:hover .project-image img {
-  transform:scale(1.05);
-}
-.image-link {
-  position:absolute;
-  top:1rem;
-  right:1rem;
-  display:grid;
-  place-items:center;
-  width:2.4rem;
-  height:2.4rem;
-  border-radius:50%;
-  background:var(--accent);
-  color:var(--ink);
-  font-size:1.1rem;
-  opacity:0;
-  transform:translateY(5px);
-  transition:.25s;
-}
-.project-card:hover .image-link {
-  opacity:1;
-  transform:none;
-}
-.project-info {
-  padding:1.6rem;
-}
-.project-index {
-  margin-bottom:.75rem;
-}
-.project-info h3 {
-  margin-bottom:.7rem;
-  font-size:1.35rem;
-  letter-spacing:-.045em;
-}
-.project-info > p:not(.project-index) {
-  min-height:4.3rem;
-  margin-bottom:1.2rem;
-  color:var(--muted);
-  font-size:.88rem;
-}
-.tag-list {
-  display:flex;
-  flex-wrap:wrap;
-  gap:.45rem;
-  margin:0 0 1.5rem;
-  padding:0;
-  list-style:none;
-}
-.tag-list li {
-  padding:.32rem .55rem;
-  border:1px solid var(--line);
-  border-radius:.3rem;
-  color:var(--muted);
-  font:.64rem 'DM Mono',monospace;
-}
-.project-link {
-  font-size:.78rem;
-}
-/* Learning cards */
 .learning-grid {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1rem;
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:1rem;
@@ -768,10 +690,6 @@ em {
   background:color-mix(in srgb,var(--surface) 75%,transparent);
   box-shadow:var(--clay-raised);
 }
-.learning-card p {
-  color:var(--accent);
-  font:.67rem 'DM Mono',monospace;
-  text-transform:uppercase;
 .learning-card p {
   color:var(--accent);
   font:.67rem 'DM Mono',monospace;
