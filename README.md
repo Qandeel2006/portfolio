@@ -18,24 +18,18 @@ No build step or package installation is required. The site is a static HTML, CS
 
 - Responsive claymorphism portfolio layout
 - Warm-peach light mode and lavender dark mode with saved preference
-- Mobile navigation with accessible menu controls
+- Icon navigation with labels, bounce-in-a-circle click animation and active-section highlight
+- Experience and education timelines
 - Scroll progress indicator and reduced-motion support
 - Hero profile section with internship availability status
 - Cinematic HLS-video hero background with graceful native/HLS.js playback support
-<<<<<<< HEAD
 - "Qandi" screen pet that walks along the page, naps when idle, comments on sections, and opens a help panel when clicked
-=======
-- Floating illustrated portfolio helper with quick links to projects and contact
->>>>>>> newstyle
-- Mobile-safe navigation, custom favicon, and a GitHub Pages-ready 404 page
+- Mobile-safe navigation, custom favicon, and a GitHub Pages-ready 404 page that also opens when an internal link or file cannot be found
+- Claymorphism on every section: raised cards, pressed-in frames, tags, meters, footer and contact panel
 - Optimized JPG dashboard and helper images for faster page loads
-- Featured Power BI and Tableau dashboard projects
+- Featured Power BI and Tableau dashboard projects, plus the in-progress AI hospital routing project and this website
 - Certificate gallery for Power BI and C++ learning milestones
-<<<<<<< HEAD
 - Validated contact form that emails messages straight to the inbox via FormSubmit (falls back to the visitor's email app)
-=======
-- Small validated contact form that opens a prefilled email message
->>>>>>> newstyle
 - Skills and learning sections with clear progress indicators
 - Direct email and LinkedIn contact actions
 - Resume link and GitHub project links

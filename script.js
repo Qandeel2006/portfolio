@@ -115,11 +115,41 @@ document.querySelectorAll('.helper-actions a').forEach((link) => {
   link.addEventListener('click', () => setHelperState(false));
 });
 
-// Close the mobile navigation after choosing a section.
+// Icon navigation: each icon bounces in a small circle when clicked.
 document.querySelectorAll('.nav-links a').forEach((link) => {
   link.addEventListener('click', () => {
-    closeMenu();
+    link.classList.remove('is-bouncing');
+    void link.offsetWidth; // restart the animation if clicked twice
+    link.classList.add('is-bouncing');
+    setTimeout(() => link.classList.remove('is-bouncing'), 800);
+
+    // Let the bounce play before the mobile menu folds away.
+    setTimeout(closeMenu, window.innerWidth <= 680 ? 450 : 0);
   });
+});
+
+// Highlight the icon of the section currently on screen.
+const navLinks = Array.from(document.querySelectorAll('.nav-links a'));
+const navSpy = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+
+      navLinks.forEach((link) => {
+        const isActive = link.getAttribute('href') === `#${entry.target.id}`;
+
+        link.classList.toggle('is-active', isActive);
+        if (isActive) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+    });
+  },
+  { rootMargin: '-45% 0px -50% 0px', threshold: 0 }
+);
+
+navLinks.forEach((link) => {
+  const section = document.querySelector(link.getAttribute('href'));
+  if (section) navSpy.observe(section);
 });
 
 window.addEventListener('resize', () => {
@@ -251,6 +281,7 @@ const petState = {
   x: 0,
   target: 0,
   facing: 1,
+  dir: -1,
   mode: 'idle',
   idleUntil: 0,
   lastActive: Date.now(),
@@ -315,21 +346,10 @@ function choosePetAction(now) {
     return;
   }
 
-  if (Math.random() < 0.6) {
-    const max = petMaxX();
-    let target = petMargin + Math.random() * (max - petMargin);
-
-    // Make sure each walk is long enough to be worth it.
-    if (Math.abs(target - petState.x) < 90) {
-      target = petState.x < max / 2 ? max - Math.random() * 100 : petMargin + Math.random() * 100;
-    }
-
-    petState.target = Math.min(Math.max(target, petMargin), max);
-    petState.facing = petState.target >= petState.x ? 1 : -1;
-    setPetMode('walk');
-  } else {
-    petState.idleUntil = now + 2000 + Math.random() * 3500;
-  }
+  // Walk all the way to the other end of the screen. The pet only turns
+  // around once it gets there, never when it starts moving.
+  petState.target = petState.dir > 0 ? petMaxX() : petMargin;
+  setPetMode('walk');
 }
 
 function renderPet() {
@@ -361,6 +381,9 @@ function petFrame(timestamp) {
       petState.x = petState.target;
       setPetMode('idle');
       petState.idleUntil = now + 1500 + Math.random() * 3000;
+      // Reached the other end: now turn around.
+      petState.dir *= -1;
+      petState.facing = -petState.dir;
     } else {
       petState.x += Math.sign(distance) * step;
     }
@@ -424,6 +447,8 @@ window.addEventListener('resize', () => {
 // The pet comments on each section the first time you reach it.
 const petSectionLines = {
   about: 'That is Qandeel! Nice to meet you.',
+  experience: 'Teaching, leading, coordinating... busy person!',
+  education: 'Studying data science, graduating in 2028.',
   skills: 'Python, SQL, Power BI... lots to explore.',
   projects: 'These dashboards are my favourites!',
   learning: 'Always learning something new.',
@@ -448,4 +473,57 @@ const petSectionObserver = new IntersectionObserver(
 Object.keys(petSectionLines).forEach((id) => {
   const section = document.getElementById(id);
   if (section) petSectionObserver.observe(section);
+});
+
+// 404 safety net
+// --------------
+// If an internal link or file cannot be opened, show the custom 404 page
+// instead of the browser's default error.
+document.addEventListener('click', async (event) => {
+  const link = event.target.closest && event.target.closest('a[href]');
+
+  if (!link || event.defaultPrevented || event.button !== 0) return;
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+  const url = new URL(link.href, window.location.href);
+
+  // Only http(s) links on this site can be checked; email and outside links are left alone.
+  if (!/^https?:$/.test(url.protocol) || url.origin !== window.location.origin) return;
+
+  // Links to a section on this page: make sure the section exists.
+  if (url.pathname === window.location.pathname && url.hash) {
+    const id = decodeURIComponent(url.hash.slice(1));
+
+    if (id && !document.getElementById(id)) {
+      event.preventDefault();
+      window.location.href = '404.html';
+    }
+    return;
+  }
+
+  // Links to other pages or files (certificates, resume): check they exist first.
+  event.preventDefault();
+  const opensInNewTab = link.target === '_blank';
+  const newTab = opensInNewTab ? window.open('', '_blank') : null;
+  let destination = url.href;
+
+  try {
+    const response = await fetch(url.href, { method: 'HEAD' });
+    if (response.status === 404 || response.status === 410) destination = '404.html';
+  } catch (error) {
+    // Network problem: let the browser try the original link.
+  }
+
+  if (newTab) newTab.location.href = destination;
+  else window.location.href = destination;
+});
+
+// Project pictures: if the first guess (.png) is not found, try other common file types.
+document.querySelectorAll('img[data-exts]').forEach((image) => {
+  const types = image.dataset.exts.split(',');
+
+  image.addEventListener('error', () => {
+    const next = types.shift();
+    if (next) image.src = image.src.replace(/\.[a-z]+$/i, `.${next}`);
+  });
 });

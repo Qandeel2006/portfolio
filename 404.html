@@ -22,5 +22,11 @@
       <a class="button" href="index.html">Back to home <span aria-hidden="true">&rarr;</span></a>
     </section>
   </main>
+  <script>
+    // Match the theme the visitor chose on the main site.
+    try {
+      if (localStorage.getItem('portfolio-theme') === 'dark') document.body.classList.add('dark-theme');
+    } catch (error) {}
+  </script>
 </body>
 </html>

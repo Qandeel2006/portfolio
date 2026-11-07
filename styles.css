@@ -163,7 +163,8 @@ button {
 }
 .nav-links {
   display:flex;
-  gap:1.4rem;
+  align-items:flex-start;
+  gap:.9rem;
   margin:0;
   padding:0;
   list-style:none;
@@ -1090,7 +1091,7 @@ em {
     gap:.9rem;
   }
   .nav-links {
-    gap:.8rem;
+    gap:.45rem;
   }
   .hero {
     gap:2.5rem;
@@ -1128,12 +1129,14 @@ em {
     align-items:stretch;
   }
   .nav-links {
-    flex-direction:column;
-    gap:0;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    justify-items:center;
+    gap:1rem .4rem;
   }
-  .nav-links a {
-    display:block;
-    padding:.65rem .25rem;
+  .nav-panel.open .nav-icon-bubble {
+    animation:icon-pop .55s cubic-bezier(.28,.84,.42,1) both;
+    animation-delay:calc(var(--i) * 55ms);
   }
   .theme-toggle {
     align-self:center;
@@ -1319,4 +1322,503 @@ em {
   opacity:.65;
   cursor:progress;
   transform:none;
+}
+
+/* Icon navigation */
+.nav-icon {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.35rem;
+  min-width:2.8rem;
+}
+.nav-icon-bubble {
+  position:relative;
+  display:grid;
+  place-items:center;
+  width:2.6rem;
+  height:2.6rem;
+  border-radius:50%;
+  background:var(--surface);
+  color:var(--muted);
+  box-shadow:var(--clay-raised);
+  transition:color .2s,background .2s;
+}
+.nav-icon-bubble svg {
+  width:1.2rem;
+  height:1.2rem;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.nav-icon-bubble::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  border:2px solid var(--accent);
+  border-radius:50%;
+  opacity:0;
+  pointer-events:none;
+}
+.nav-icon-label {
+  color:var(--muted);
+  font-size:.6rem;
+  font-weight:800;
+  letter-spacing:.02em;
+  line-height:1;
+  white-space:nowrap;
+}
+.nav-icon:hover .nav-icon-bubble,
+.nav-icon:focus-visible .nav-icon-bubble {
+  color:var(--accent);
+  animation:icon-bounce .6s cubic-bezier(.28,.84,.42,1);
+}
+.nav-icon:hover .nav-icon-label,
+.nav-icon:focus-visible .nav-icon-label {
+  color:var(--text);
+}
+.nav-icon.is-active .nav-icon-bubble {
+  background:var(--accent);
+  color:var(--ink);
+}
+.nav-icon.is-active .nav-icon-label {
+  color:var(--text);
+}
+.nav-icon.is-bouncing .nav-icon-bubble {
+  animation:icon-orbit .75s cubic-bezier(.4,0,.3,1);
+}
+.nav-icon.is-bouncing .nav-icon-bubble::after {
+  animation:icon-ring .7s ease-out;
+}
+@keyframes icon-bounce {
+  0%,100% { transform:translateY(0) scale(1); }
+  30% { transform:translateY(-10px) scale(1.08); }
+  55% { transform:translateY(0) scale(1.06,.92); }
+  75% { transform:translateY(-4px) scale(1); }
+}
+@keyframes icon-orbit {
+  0% { transform:translate(0,0) scale(1); }
+  25% { transform:translate(11px,-11px) scale(1.1); }
+  50% { transform:translate(0,-22px) scale(1.16); }
+  75% { transform:translate(-11px,-11px) scale(1.1); }
+  100% { transform:translate(0,0) scale(1); }
+}
+@keyframes icon-ring {
+  0% { opacity:.9; transform:scale(1); }
+  100% { opacity:0; transform:scale(1.9); }
+}
+@keyframes icon-pop {
+  0% { opacity:0; transform:scale(0) translateY(10px); }
+  65% { opacity:1; transform:scale(1.18); }
+  100% { opacity:1; transform:scale(1); }
+}
+@media (max-width:860px) {
+  .nav-panel .button {
+    display:none;
+  }
+}
+
+/* Experience and education timelines */
+.experience-section,.education-section {
+  padding-block:6.5rem;
+}
+.timeline {
+  margin:0;
+  padding:0;
+  list-style:none;
+  border-top:1px solid var(--line);
+}
+.timeline-item {
+  display:grid;
+  grid-template-columns:11rem 1fr;
+  gap:1rem 2rem;
+  padding:1.7rem .2rem;
+  border-bottom:1px solid var(--line);
+  transition:padding .2s,background .2s;
+}
+.timeline-item:hover {
+  padding-inline:1rem;
+  background:color-mix(in srgb,var(--surface) 72%,transparent);
+}
+.timeline-date {
+  margin:.3rem 0 0;
+  color:var(--accent);
+  font:500 .72rem/1.5 'DM Mono',monospace;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.timeline-body h3 {
+  margin:0 0 .2rem;
+  font-size:1.3rem;
+  letter-spacing:-.035em;
+}
+.timeline-org {
+  margin:0;
+  color:var(--text);
+  font-size:.9rem;
+  font-weight:700;
+}
+.timeline-body ul {
+  margin:.8rem 0 0;
+  padding-left:1.1rem;
+  color:var(--muted);
+  font-size:.88rem;
+}
+.timeline-body li + li {
+  margin-top:.3rem;
+}
+@media (max-width:680px) {
+  .timeline-item {
+    grid-template-columns:1fr;
+    gap:.4rem;
+  }
+  .experience-section,.education-section {
+    padding-block:5rem;
+  }
+}
+
+/* ===== Claymorphism pass: soft raised or pressed surfaces everywhere ===== */
+
+/* Screen pet: no circle behind it, just the character */
+.helper-trigger {
+  width:5rem;
+  height:5rem;
+  background:transparent;
+  box-shadow:none;
+}
+.helper-trigger:hover,
+.helper-trigger:focus-visible {
+  box-shadow:none;
+}
+.helper-trigger:focus-visible {
+  outline:2px solid var(--accent);
+  outline-offset:4px;
+  border-radius:50%;
+}
+.helper-trigger img {
+  border-radius:0;
+  object-fit:contain;
+  object-position:center bottom;
+  filter:drop-shadow(0 8px 10px rgba(70,57,84,.28));
+}
+.helper-trigger-ring {
+  display:none;
+}
+
+/* Navigation: the active icon looks pressed in */
+.nav-icon.is-active .nav-icon-bubble {
+  box-shadow:var(--clay-inset);
+}
+
+/* Scroll progress becomes a soft clay track */
+.progress {
+  top:.35rem;
+  left:.75rem;
+  right:.75rem;
+  width:auto;
+  height:.5rem;
+  border-radius:999px;
+  background:color-mix(in srgb,var(--surface) 55%,transparent);
+  box-shadow:var(--clay-inset);
+  overflow:hidden;
+}
+.progress span {
+  border-radius:inherit;
+}
+
+/* Hero */
+.orbit {
+  border:0;
+  box-shadow:var(--clay-inset);
+  opacity:.55;
+}
+.hero-stats {
+  flex-wrap:wrap;
+  gap:1rem;
+}
+.hero-stats div {
+  min-width:5.2rem;
+  padding:.85rem 1.05rem;
+  border-radius:1.05rem;
+  background:var(--surface);
+  box-shadow:var(--clay-raised);
+}
+
+/* Links become small clay pills */
+.text-link,
+.project-link {
+  padding:.6rem .95rem;
+  border:0;
+  border-radius:999px;
+  background:var(--surface);
+  box-shadow:var(--clay-raised);
+  transition:box-shadow .2s,color .2s;
+}
+.text-link:hover,
+.project-link:hover {
+  box-shadow:var(--clay-inset);
+}
+.text-link-light {
+  background:color-mix(in srgb,var(--surface) 82%,transparent);
+}
+.button-light:hover {
+  box-shadow:7px 7px 15px rgba(70,57,84,.22),-5px -5px 14px rgba(255,255,255,.25);
+}
+
+/* About values, skills, timelines: clay cards instead of flat rows */
+.skills-section {
+  border-top:0;
+}
+.values-grid,
+.skill-list,
+.timeline {
+  display:grid;
+  gap:1.1rem;
+  border-top:0;
+}
+.values-grid article,
+.skill-list li,
+.timeline-item {
+  border:0;
+  border-radius:1.2rem;
+  background:var(--surface);
+  box-shadow:var(--clay-raised);
+  transition:transform .25s,box-shadow .25s;
+}
+.values-grid article {
+  padding:1.3rem 1.5rem;
+}
+.skill-list li,
+.timeline-item {
+  padding:1.3rem 1.6rem;
+}
+.timeline-item {
+  padding:1.6rem 1.7rem;
+}
+.values-grid article:hover,
+.skill-list li:hover,
+.timeline-item:hover {
+  padding-inline:revert;
+  background:var(--surface);
+  transform:translateY(-4px);
+  box-shadow:var(--shadow);
+}
+.skill-list li:hover {
+  padding-inline:1.6rem;
+}
+.timeline-item:hover {
+  padding-inline:1.7rem;
+}
+.values-grid article:hover {
+  padding-inline:1.5rem;
+}
+
+/* Projects and certificates: pictures sit inside the card like pressed-in frames */
+.project-image {
+  margin:.8rem .8rem 0;
+  border-radius:1rem;
+  box-shadow:var(--clay-inset);
+}
+.tag-list li {
+  padding:.38rem .75rem;
+  border:0;
+  border-radius:999px;
+  background:var(--surface-soft);
+  box-shadow:var(--clay-inset);
+}
+.certificate-card > a {
+  margin:.9rem .9rem 0;
+  border-radius:1rem;
+  box-shadow:var(--clay-inset);
+}
+
+/* Learning meters: pressed track, raised fill */
+.meter {
+  height:.6rem;
+  background:var(--surface-soft);
+  box-shadow:var(--clay-inset);
+}
+.meter i {
+  box-shadow:2px 2px 5px rgba(106,145,168,.35);
+}
+
+/* Contact becomes a floating clay panel */
+.contact-section {
+  width:min(1180px,calc(100% - 2rem));
+  margin-inline:auto;
+  margin-bottom:2rem;
+  border-radius:2.4rem;
+  box-shadow:14px 14px 30px rgba(106,145,168,.28),-10px -10px 24px rgba(255,255,255,.7),inset 0 12px 24px rgba(255,255,255,.28),inset 0 -12px 24px rgba(72,118,145,.15);
+}
+body.dark-theme .contact-section {
+  box-shadow:14px 14px 30px rgba(12,10,24,.5),-10px -10px 24px rgba(73,66,103,.3),inset 0 12px 24px rgba(255,255,255,.14),inset 0 -12px 24px rgba(72,118,145,.18);
+}
+
+/* Footer */
+.site-footer {
+  min-height:5.5rem;
+  margin-bottom:1.5rem;
+  padding:1.2rem 1.6rem;
+  border-radius:1.4rem;
+  background:var(--surface);
+  box-shadow:var(--clay-raised);
+}
+
+/* Project illustrations and status badges */
+.project-art {
+  background:var(--surface-soft);
+}
+.project-art svg {
+  display:block;
+  width:100%;
+  height:100%;
+}
+.art-roads path {
+  fill:none;
+  stroke:color-mix(in srgb,var(--muted) 38%,transparent);
+  stroke-width:5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.art-route {
+  fill:none;
+  stroke:var(--accent);
+  stroke-width:7;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.art-nodes circle {
+  fill:var(--surface);
+  stroke:color-mix(in srgb,var(--muted) 60%,transparent);
+  stroke-width:3;
+}
+.art-start {
+  fill:var(--accent);
+  stroke:var(--surface);
+  stroke-width:4;
+}
+.art-hospital rect {
+  fill:var(--accent);
+}
+.art-hospital path {
+  fill:none;
+  stroke:var(--ink);
+  stroke-width:4;
+  stroke-linecap:round;
+}
+.art-hospital-muted {
+  opacity:.45;
+}
+.art-window {
+  fill:var(--surface);
+}
+.art-dot {
+  fill:var(--accent);
+}
+.art-block {
+  fill:var(--surface-soft);
+}
+.art-pill {
+  fill:var(--accent);
+}
+.art-pet {
+  fill:var(--accent);
+  stroke:var(--surface);
+  stroke-width:4;
+}
+.project-status {
+  display:inline-block;
+  margin-left:.5rem;
+  padding:.2rem .6rem;
+  border-radius:999px;
+  background:var(--surface-soft);
+  box-shadow:var(--clay-inset);
+  color:var(--text);
+  font-size:.6rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  vertical-align:middle;
+}
+.project-note {
+  margin:0;
+  color:var(--muted);
+  font-size:.78rem;
+  font-weight:700;
+}
+
+/* Show every picture whole: fit inside the frame, never cropped */
+.project-image {
+  padding:.5rem;
+}
+.project-image img {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  border-radius:.7rem;
+}
+.project-card:hover .project-image img {
+  transform:scale(1.02);
+}
+.certificate-card > a {
+  aspect-ratio:4 / 3;
+  min-height:0;
+  padding:.7rem;
+}
+.certificate-card img {
+  width:100%;
+  height:100%;
+  max-height:none;
+  object-fit:contain;
+}
+
+/* Frames shrink to the picture: height follows each image's own shape */
+.projects-grid,
+.certificates-grid {
+  align-items:start;
+}
+.project-image {
+  aspect-ratio:auto;
+}
+.project-image img {
+  height:auto;
+  object-fit:initial;
+}
+.certificate-card > a {
+  aspect-ratio:auto;
+}
+.certificate-card img {
+  height:auto;
+  object-fit:initial;
+}
+
+/* Project cards: same size in every row, pictures fitted whole inside */
+.projects-grid {
+  align-items:stretch;
+}
+.project-card {
+  display:flex;
+  flex-direction:column;
+}
+.project-image {
+  aspect-ratio:16 / 9;
+  padding:.35rem;
+}
+.project-image img {
+  height:100%;
+  object-fit:contain;
+}
+.project-info {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+.project-info .project-link {
+  margin-top:auto;
+  align-self:flex-start;
+}
+.project-info .project-note {
+  margin-top:auto;
 }
