@@ -22,12 +22,20 @@ No build step or package installation is required. The site is a static HTML, CS
 - Scroll progress indicator and reduced-motion support
 - Hero profile section with internship availability status
 - Cinematic HLS-video hero background with graceful native/HLS.js playback support
+<<<<<<< HEAD
 - "Qandi" screen pet that walks along the page, naps when idle, comments on sections, and opens a help panel when clicked
+=======
+- Floating illustrated portfolio helper with quick links to projects and contact
+>>>>>>> newstyle
 - Mobile-safe navigation, custom favicon, and a GitHub Pages-ready 404 page
 - Optimized JPG dashboard and helper images for faster page loads
 - Featured Power BI and Tableau dashboard projects
 - Certificate gallery for Power BI and C++ learning milestones
+<<<<<<< HEAD
 - Validated contact form that emails messages straight to the inbox via FormSubmit (falls back to the visitor's email app)
+=======
+- Small validated contact form that opens a prefilled email message
+>>>>>>> newstyle
 - Skills and learning sections with clear progress indicators
 - Direct email and LinkedIn contact actions
 - Resume link and GitHub project links
