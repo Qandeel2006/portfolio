@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HR Analytics Dashboard: the story behind the project, by Qandeel Qudsia.">
+  <meta name="theme-color" content="#fff0e8">
+  <meta property="og:title" content="HR Analytics Dashboard | Qandeel Qudsia">
+  <meta property="og:description" content="Thoughtful dashboards, practical analyses, and polished web experiences.">
+  <meta name="robots" content="index, follow">
+
+  <title>HR Analytics Dashboard | Qandeel Qudsia</title>
+
+  <!-- Fonts and the main stylesheet -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <!-- Decorative background elements -->
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="page-glow glow-one"></div>
+  <div class="page-glow glow-two"></div>
+  <div class="progress" aria-hidden="true">
+    <span id="progress-bar"></span>
+  </div>
+
+  <!-- Site navigation -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Main navigation">
+      <a class="logo" href="index.html" aria-label="Qandeel Qudsia home">
+        QQ<span>.</span>
+      </a>
+
+      <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-menu">
+        <span class="sr-only">Open menu</span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-panel" id="site-menu">
+        <ul class="nav-links">
+          <li style="--i:0"><a class="nav-icon" href="index.html"><span class="nav-icon-bubble"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11l9-8 9 8M5 10v10h14V10M10 20v-6h4v6"/></svg></span><span class="nav-icon-label">Home</span></a></li>
+          <li style="--i:1"><a class="nav-icon" href="index.html#about"><span class="nav-icon-bubble"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></span><span class="nav-icon-label">About</span></a></li>
+          <li style="--i:2"><a class="nav-icon is-active" aria-current="page" href="index.html#projects"><span class="nav-icon-bubble"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="nav-icon-label">Projects</span></a></li>
+          <li style="--i:3"><a class="nav-icon" href="index.html#contact"><span class="nav-icon-bubble"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><span class="nav-icon-label">Contact</span></a></li>
+        </ul>
+
+        <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch color theme">
+          <span aria-hidden="true">&#10022;</span>
+        </button>
+
+        <a class="button button-small" href="#contact">
+          Let's talk <span aria-hidden="true">&#8599;</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="section-shell page-hero" id="hook">
+      <div class="reveal">
+        <div class="back-links"><a class="text-link back-link" href="index.html"><span aria-hidden="true">&larr;</span> Back to home</a><a class="text-link back-link" href="index.html#projects">All projects</a></div>
+        <p class="eyebrow"><span class="signal"></span>Project 02 / Data Visualization</p>
+        <h1>Behind every organization is a story about its people.</h1>
+        <div class="about-copy wide"><p>An organization isn't just made up of departments, numbers, and targets. It's made up of people.</p><p>HR data can reveal patterns about a workforce, but those patterns are not always easy to recognize when information is scattered across tables and spreadsheets. I wanted to explore how visualization could make that information easier to understand.</p></div>
+        <ul class="trait-list" aria-label="Tools and status"><li>Tableau</li></ul>
+      </div>
+    </section>
+
+    <section class="section-shell story">
+      <aside class="story-visual">
+        <button class="zoomable" type="button" aria-label="Open a larger preview of the HR Analytics Dashboard picture">
+          <img src="assets/hr-dashboard.jpg" data-exts="jpg,jpeg,webp" alt="HR Analytics Dashboard built in Tableau">
+        </button>
+        <p class="story-caption" id="story-caption">Tap the picture to enlarge it</p>
+        <ol class="story-dots" aria-label="Story chapters"><li><a href="#ch-context" data-label="02 &middot; The Context">Context</a></li><li><a href="#ch-challenge" data-label="03 &middot; The Challenge">Challenge</a></li><li><a href="#ch-journey" data-label="04 &middot; The Journey">Journey</a></li><li><a href="#ch-reveal" data-label="05 &middot; The Reveal">Reveal</a></li><li><a href="#ch-reflection" data-label="06 &middot; The Reflection">Reflection</a></li></ol>
+        <a class="button" href="https://github.com/Qandeel2006" target="_blank" rel="noopener">View on GitHub <span aria-hidden="true">&#8599;</span></a>
+      </aside>
+      <div class="story-chapters">
+        <article class="chapter reveal" id="ch-context" data-label="02 &middot; The Context">
+          <p class="eyebrow">02 / The Context</p>
+          <h2>Why it exists</h2>
+          <p>This project explores workforce-related information through an interactive Tableau dashboard.</p><p>The idea was to bring different HR metrics into a unified visual space and make the information easier to explore.</p>
+          
+        </article>
+        <article class="chapter reveal" id="ch-challenge" data-label="03 &middot; The Challenge">
+          <p class="eyebrow">03 / The Challenge</p>
+          <h2>What needed solving</h2>
+          <p>How can employee-related data be presented in a way that is clear, organized, and meaningful?</p><p>I focused on creating visual summaries that allow viewers to explore workforce metrics and recognize patterns in the available data.</p>
+          
+        </article>
+        <article class="chapter reveal" id="ch-journey" data-label="04 &middot; The Journey">
+          <p class="eyebrow">04 / The Journey</p>
+          <h2>How it came together</h2>
+          <p>I began by exploring the dataset and identifying the information that could be communicated visually.</p><p>Then came the visualization process: selecting appropriate charts, organizing the dashboard, and thinking about how different elements should work together.</p><p>I experimented with layout, visual hierarchy, and interactive elements to make the dashboard feel like a connected analytical experience rather than a collection of unrelated charts.</p>
+          <div class="choice">
+            <p class="choice-q">What would you want to know first about a workforce?</p>
+            <ul class="skill-chips"><li><button class="skill-chip choice-option" type="button" aria-pressed="false" data-answer="The dashboard brings the main workforce KPIs together in one visual space.">The big picture</button></li><li><button class="skill-chip choice-option" type="button" aria-pressed="false" data-answer="It explores how employees are spread across departments.">Where people sit</button></li><li><button class="skill-chip choice-option" type="button" aria-pressed="false" data-answer="It looks at attrition patterns in the available data.">Who leaves</button></li></ul>
+            <p class="choice-answer" aria-live="polite">Pick one to explore.</p>
+          </div>
+          <div class="skill-group">
+            <h3>Tools in this project</h3>
+            <ul class="skill-chips"><li><button class="skill-chip" type="button" aria-pressed="false" data-note="Where the dashboard was built: choosing charts, organizing the layout and adding interactivity.">Tableau</button></li><li><button class="skill-chip" type="button" aria-pressed="false" data-note="Visual hierarchy and how the different elements work together as one experience.">Dashboard design</button></li></ul>
+            <p class="skill-note" aria-live="polite">Tap a tool to see its role.</p>
+          </div>
+        </article>
+        <article class="chapter reveal" id="ch-reveal" data-label="05 &middot; The Reveal">
+          <p class="eyebrow">05 / The Reveal</p>
+          <h2>Making workforce information easier to explore.</h2>
+          <p>The result is an HR analytics dashboard built in Tableau.</p>
+          <button class="text-link" type="button" data-zoom>Open the full-size preview <span aria-hidden="true">&#8599;</span></button>
+        </article>
+        <article class="chapter reveal" id="ch-reflection" data-label="06 &middot; The Reflection">
+          <p class="eyebrow">06 / The Reflection</p>
+          <h2>What I took from it</h2>
+          <p>This project strengthened my understanding of data visualization and dashboard storytelling.</p><p>It also helped me appreciate how important it is to consider the audience when presenting analytical information.</p><p><strong>Future exploration:</strong> deeper workforce analysis, additional filters, and more focused insights based on the dataset.</p>
+          
+        </article>
+      </div>
+    </section>
+
+    <section class="section-shell story-end-section">
+      <div class="story-ending reveal">
+        <p class="eyebrow">07 / The ending</p>
+        <h2>Every project leaves something behind.</h2>
+        <blockquote class="takeaway">Good analysis starts by remembering who the audience is.</blockquote>
+        <p>Sometimes it's a working application. Sometimes it's a new skill, a better question, or a completely different way of looking at a problem. These projects are part of my ongoing journey through Data Science and technology.</p>
+        <p><strong>More experiments, more questions, more things to build.</strong></p>
+        <div class="hero-actions">
+          <a class="button" href="index.html#projects">Explore more projects <span aria-hidden="true">&#8599;</span></a>
+          <a class="text-link" href="https://github.com/Qandeel2006" target="_blank" rel="noopener">Visit GitHub <span aria-hidden="true">&#8599;</span></a>
+        </div>
+      </div>
+      <nav class="project-pager reveal" aria-label="Other projects">
+        <a href="project-sales.html"><span>&larr; Previous</span><strong>Sales Performance Dashboard</strong></a>
+        <a href="project-routing.html"><span>Next &rarr;</span><strong>Smart Emergency Hospital Routing</strong></a>
+      </nav>
+    </section>
+  </main>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Larger preview">
+    <button class="lightbox-close" type="button" aria-label="Close preview">&times;</button>
+    <img src="" alt="">
+  </dialog>
+
+  <!-- Footer -->
+  <footer class="site-footer section-shell">
+    <a class="logo" href="index.html" aria-label="Back to the top of Qandeel Qudsia's portfolio">QQ<span>.</span></a>
+    <p>Built with curiosity, one project at a time.</p>
+    <div>
+      <a href="https://github.com/Qandeel2006" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://pk.linkedin.com/in/qandeel-qudsia" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:qandeelqudsia@gmail.com">Email</a>
+    </div>
+  </footer>
+
+  <!-- Screen pet: Qandi walks along the bottom of the page -->
+  <aside class="portfolio-helper" id="screen-pet" aria-label="Qandi, Qandeel's screen pet">
+    <div class="helper-panel" id="helper-panel" role="dialog" aria-labelledby="helper-title" aria-hidden="true">
+      <button class="helper-close" type="button" aria-label="Close helper">&times;</button>
+      <img class="helper-avatar" src="assets/qandeel-helper%20(2).png" alt="Illustrated avatar of Qandeel" width="112" height="112">
+      <div class="helper-copy">
+        <p class="helper-kicker">Hi, I'm Qandi!</p>
+        <h2 id="helper-title">How can I help?</h2>
+        <p>I can point you to my projects, skills, or the best way to get in touch.</p>
+      </div>
+      <div class="helper-actions">
+        <a href="#projects">See my work <span aria-hidden="true">&rarr;</span></a>
+        <a href="#contact">Get in touch <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+    <p class="pet-bubble" role="status" aria-live="polite"></p>
+    <button class="helper-trigger" type="button" aria-controls="helper-panel" aria-expanded="false" aria-label="Open Qandi, Qandeel's screen pet">
+      <span class="pet-spark pet-spark-one" aria-hidden="true">&#10022;</span>
+      <span class="pet-spark pet-spark-two" aria-hidden="true">&#10022;</span>
+      <img src="assets/qandeel-helper%20(2).png" alt="" width="64" height="64">
+      <span class="helper-status" aria-hidden="true"></span>
+      <span class="pet-zzz" aria-hidden="true">z z</span>
+    </button>
+  </aside>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

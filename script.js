@@ -61,7 +61,7 @@ themeButton.addEventListener('click', () => {
     ? 'light'
     : 'dark';
 
-  applyTheme(nextTheme);
+  playLampScene(nextTheme);
 });
 
 // Open and close the mobile navigation.
@@ -148,7 +148,8 @@ const navSpy = new IntersectionObserver(
 );
 
 navLinks.forEach((link) => {
-  const section = document.querySelector(link.getAttribute('href'));
+  const href = link.getAttribute('href');
+  const section = href.startsWith('#') ? document.querySelector(href) : null;
   if (section) navSpy.observe(section);
 });
 
@@ -451,6 +452,7 @@ const petSectionLines = {
   education: 'Studying data science, graduating in 2028.',
   skills: 'Python, SQL, Power BI... lots to explore.',
   projects: 'These dashboards are my favourites!',
+  experiments: 'Small projects, honest practice.',
   learning: 'Always learning something new.',
   certificates: 'So many certificates!',
   contact: 'Say hi! Your message goes straight to my inbox.'
@@ -527,3 +529,190 @@ document.querySelectorAll('img[data-exts]').forEach((image) => {
     if (next) image.src = image.src.replace(/\.[a-z]+$/i, `.${next}`);
   });
 });
+
+// Toolkit: tap a tool to read how it has been used.
+document.querySelectorAll('.skill-group').forEach((group) => {
+  const note = group.querySelector('.skill-note');
+
+  group.querySelectorAll('.skill-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      group.querySelectorAll('.skill-chip').forEach((other) => {
+        other.setAttribute('aria-pressed', String(other === chip));
+      });
+      note.textContent = chip.dataset.note;
+    });
+  });
+});
+
+// Project story pages
+// -------------------
+// Clickable screenshots open a larger preview.
+const lightbox = document.querySelector('#lightbox');
+const zoomable = document.querySelector('.zoomable');
+
+if (lightbox && zoomable) {
+  const lightboxImage = lightbox.querySelector('img');
+
+  function openLightbox() {
+    const source = zoomable.querySelector('img');
+
+    lightboxImage.src = source.currentSrc || source.src;
+    lightboxImage.alt = source.alt;
+    lightbox.showModal();
+  }
+
+  zoomable.addEventListener('click', openLightbox);
+  document.querySelectorAll('[data-zoom]').forEach((button) => button.addEventListener('click', openLightbox));
+  lightbox.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+  lightbox.addEventListener('click', (event) => {
+    if (event.target === lightbox) lightbox.close();
+  });
+}
+
+// The caption and chapter pills follow the chapter being read.
+const storyChapters = document.querySelectorAll('.chapter');
+const storyCaption = document.querySelector('#story-caption');
+
+if (storyChapters.length && storyCaption) {
+  const storyObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        storyCaption.textContent = entry.target.dataset.label;
+        document.querySelectorAll('.story-dots a').forEach((dot) => {
+          dot.classList.toggle('is-current', dot.getAttribute('href') === `#${entry.target.id}`);
+        });
+      });
+    },
+    { rootMargin: '-35% 0px -55% 0px', threshold: 0 }
+  );
+
+  storyChapters.forEach((chapter) => storyObserver.observe(chapter));
+}
+
+// Small questions: pick an option to read the answer.
+document.querySelectorAll('.choice').forEach((box) => {
+  const answer = box.querySelector('.choice-answer');
+
+  box.querySelectorAll('.choice-option').forEach((option) => {
+    option.addEventListener('click', () => {
+      box.querySelectorAll('.choice-option').forEach((other) => {
+        other.setAttribute('aria-pressed', String(other === option));
+      });
+      answer.textContent = option.dataset.answer;
+      answer.classList.remove('is-shown');
+      void answer.offsetWidth;
+      answer.classList.add('is-shown');
+    });
+  });
+});
+
+// Theme switch animation
+// ----------------------
+// A little man walks in, pulls the lamp string, the theme changes, and he walks away.
+let lampScene = null;
+let lampBusy = false;
+const lampRestArm = [[80, 210], [76, 228], [78, 244]];
+const lampGrabArm = [[80, 210], [73, 192], [70, 174]];
+const lampPullArm = [[80, 210], [68, 200], [70, 188]];
+
+function lampTween(duration, update, done) {
+  const start = performance.now();
+
+  function step(now) {
+    const t = Math.min((now - start) / duration, 1);
+
+    update(t * t * (3 - 2 * t));
+    if (t < 1) requestAnimationFrame(step);
+    else if (done) done();
+  }
+
+  requestAnimationFrame(step);
+}
+
+function buildLampScene() {
+  const scene = document.createElement('div');
+
+  scene.className = 'lamp-scene';
+  scene.setAttribute('aria-hidden', 'true');
+  scene.innerHTML = `<svg viewBox="0 0 120 256" focusable="false">
+    <path class="lamp-cone" d="M52 96 L88 96 L116 256 L24 256 Z"/>
+    <line class="lamp-cord" x1="70" y1="0" x2="70" y2="52"/>
+    <path class="lamp-shade" d="M44 90 Q70 40 96 90 Z"/>
+    <circle class="lamp-bulb" cx="70" cy="94" r="6"/>
+    <line class="lamp-string" x1="70" y1="98" x2="70" y2="173"/>
+    <circle class="lamp-bead" cx="70" cy="176" r="3.5"/>
+    <g class="lamp-man"><g class="lamp-bob">
+      <line class="lamp-leg" x1="85" y1="236" x2="85" y2="254"/>
+      <line class="lamp-leg" x1="95" y1="236" x2="95" y2="254"/>
+      <rect class="lamp-body" x="79" y="202" width="22" height="34" rx="9"/>
+      <circle class="lamp-head" cx="90" cy="190" r="10"/>
+      <circle class="lamp-eye" cx="86" cy="189" r="1.3"/>
+      <circle class="lamp-eye" cx="92" cy="189" r="1.3"/>
+      <polyline class="lamp-arm" points=""/>
+    </g></g>
+  </svg>`;
+  document.body.appendChild(scene);
+
+  return scene;
+}
+
+function playLampScene(nextTheme) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    applyTheme(nextTheme);
+    return;
+  }
+  if (lampBusy) return;
+  lampBusy = true;
+
+  lampScene = lampScene || buildLampScene();
+  const arm = lampScene.querySelector('.lamp-arm');
+  const string = lampScene.querySelector('.lamp-string');
+  const bead = lampScene.querySelector('.lamp-bead');
+  const setArm = (pose) => arm.setAttribute('points', pose.map((point) => point.join(',')).join(' '));
+  const mix = (from, to, t) => from.map((point, i) => [
+    point[0] + (to[i][0] - point[0]) * t,
+    point[1] + (to[i][1] - point[1]) * t
+  ]);
+  const setBead = (y) => {
+    bead.setAttribute('cy', y);
+    string.setAttribute('y2', y - 3);
+  };
+
+  setArm(lampRestArm);
+  setBead(176);
+  // The lamp is lit while the page is light.
+  lampScene.classList.toggle('is-lit', !document.body.classList.contains('dark-theme'));
+  void lampScene.offsetWidth;
+  lampScene.classList.add('is-in', 'is-walking');
+
+  setTimeout(() => {
+    lampScene.classList.remove('is-walking');
+    lampTween(250, (t) => setArm(mix(lampRestArm, lampGrabArm, t)), () => {
+      lampTween(300, (t) => {
+        setArm(mix(lampGrabArm, lampPullArm, t));
+        setBead(176 + 14 * t);
+      }, () => {
+        applyTheme(nextTheme);
+        lampScene.classList.toggle('is-lit', nextTheme === 'light');
+
+        setTimeout(() => {
+          lampTween(280, (t) => {
+            setArm(mix(lampPullArm, lampGrabArm, t));
+            setBead(190 - 14 * t);
+          }, () => {
+            lampTween(250, (t) => setArm(mix(lampGrabArm, lampRestArm, t)), () => {
+              lampScene.classList.add('is-walking');
+              lampScene.classList.remove('is-in');
+              setTimeout(() => {
+                lampScene.classList.remove('is-walking');
+                lampBusy = false;
+              }, 650);
+            });
+          });
+        }, 250);
+      });
+    });
+  }, 650);
+}
