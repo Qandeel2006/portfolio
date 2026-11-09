@@ -1,5 +1,5 @@
 // Cloudflare Worker: verifies the Turnstile token, then forwards the message.
-// Settings > Variables: TURNSTILE_SECRET (secret), CONTACT_EMAIL, ALLOWED_ORIGIN (e.g. https://YOUR-DOMAIN.com)
+// Settings > Variables: TURNSTILE_SECRET (secret), CONTACT_EMAIL, ALLOWED_ORIGIN (e.g. https://qandeelqudsiaportfolio.netlify.app)
 export default {
   async fetch(request, env) {
     const cors = {

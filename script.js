@@ -647,20 +647,13 @@ function buildLampScene() {
     <line class="lamp-string" x1="70" y1="98" x2="70" y2="173"/>
     <circle class="lamp-bead" cx="70" cy="176" r="3.5"/>
     <g class="lamp-man"><g class="lamp-bob">
-      <line class="lamp-leg" x1="85" y1="236" x2="85" y2="251"/>
-      <line class="lamp-leg" x1="95" y1="236" x2="95" y2="251"/>
-      <ellipse class="lamp-shoe" cx="84" cy="254" rx="7" ry="3.2"/>
-      <ellipse class="lamp-shoe" cx="96" cy="254" rx="7" ry="3.2"/>
-      <rect class="lamp-body" x="79" y="202" width="22" height="34" rx="9"/>
-      <path class="lamp-hair" d="M77 190 C75 176 83 169 90 169 C97 169 105 176 103 190 C106 200 104 212 108 221 C102 223 99 219 98 213 L82 213 C81 219 78 223 72 221 C76 212 74 200 77 190 Z"/>
-      <circle class="lamp-head" cx="90" cy="190" r="10.5"/>
-      <path class="lamp-hair" d="M79 189 C79 178 86 177 90 177 C95 177 101 179 101 189 C97 183 92 183 90 183 C86 183 82 185 79 189 Z"/>
-      <circle class="lamp-clip" cx="98" cy="180" r="2.2"/>
-      <circle class="lamp-eye" cx="85.5" cy="191" r="1.4"/>
-      <path class="lamp-wink" d="M91 191 Q93 189.3 95 191"/>
-      <circle class="lamp-blush" cx="83" cy="195" r="2"/>
-      <circle class="lamp-blush" cx="97" cy="195" r="2"/>
-      <path class="lamp-wink" d="M88 196 Q90 198 92 196"/>
+      <line class="lamp-stick" x1="80" y1="201" x2="80" y2="230"/>
+      <line class="lamp-stick" x1="80" y1="230" x2="71" y2="253"/>
+      <line class="lamp-stick" x1="80" y1="230" x2="89" y2="253"/>
+      <circle class="lamp-stick-head" cx="80" cy="191" r="10"/>
+      <circle class="lamp-eye" cx="76.5" cy="190" r="1.4"/>
+      <circle class="lamp-eye" cx="83.5" cy="190" r="1.4"/>
+      <path class="lamp-smile" d="M77 195 Q80 198 83 195"/>
       <polyline class="lamp-arm" points=""/>
     </g></g>
   </svg>`;
@@ -737,3 +730,51 @@ document.querySelectorAll('.values-wrap').forEach((wrap) => {
     });
   });
 });
+
+// Sparkle trail: little stars follow the mouse and keep twinkling when it stops
+// (mouse users only, not with reduced motion).
+if (window.matchMedia('(pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const sparkColors = ['#ffd23f', '#8fc8ed', '#f7a8c4', '#c9a7f5'];
+  let sparkLast = 0;
+  let sparkX = 0;
+  let sparkY = 0;
+  let hasPointer = false;
+
+  function spawnSpark(x, y, spread) {
+    if (document.querySelectorAll('.cursor-spark').length > 60) return;
+
+    const spark = document.createElement('span');
+    spark.className = 'cursor-spark';
+    spark.setAttribute('aria-hidden', 'true');
+    spark.textContent = '\u2726';
+    spark.style.left = `${x + (Math.random() - 0.5) * spread}px`;
+    spark.style.top = `${y + (Math.random() - 0.5) * spread}px`;
+    spark.style.color = sparkColors[Math.floor(Math.random() * sparkColors.length)];
+    spark.style.fontSize = `${8 + Math.random() * 10}px`;
+    spark.style.setProperty('--dx', `${(Math.random() - 0.5) * 30}px`);
+    spark.style.setProperty('--dy', `${10 + Math.random() * 20}px`);
+    spark.addEventListener('animationend', () => spark.remove());
+    document.body.appendChild(spark);
+  }
+
+  window.addEventListener('pointermove', (event) => {
+    hasPointer = true;
+    const now = performance.now();
+    const moved = Math.hypot(event.clientX - sparkX, event.clientY - sparkY);
+
+    sparkX = event.clientX;
+    sparkY = event.clientY;
+    if (now - sparkLast < 35 || moved < 3) return;
+
+    sparkLast = now;
+    spawnSpark(sparkX, sparkY, 0);
+  }, { passive: true });
+
+  document.addEventListener('pointerleave', () => { hasPointer = false; });
+
+  // While the mouse is still, a few sparkles keep twinkling around it.
+  setInterval(() => {
+    if (!hasPointer || document.hidden) return;
+    spawnSpark(sparkX, sparkY, 36);
+  }, 220);
+}
