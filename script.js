@@ -163,7 +163,8 @@ window.addEventListener('resize', () => {
 // form-to-email service), so visitors do not need an email app. If sending
 // fails, the form falls back to opening the visitor's email app.
 const CONTACT_EMAIL = 'qandeelqudsia@gmail.com';
-const FORM_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
+// Cloudflare Worker that checks the Turnstile token, then forwards the message.
+const FORM_ENDPOINT = 'https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev';
 
 if (contactForm) {
   const nameInput = contactForm.querySelector('#contact-name');
@@ -215,6 +216,14 @@ if (contactForm) {
 
     if (nameMessage || emailMessage || messageMessage) return;
 
+    // Cloudflare Turnstile spam check
+    const tokenField = contactForm.querySelector('[name="cf-turnstile-response"]');
+    const token = tokenField ? tokenField.value : '';
+    const captchaError = contactForm.querySelector('#contact-captcha-error');
+    captchaError.textContent = token ? '' : 'Please complete the spam check.';
+    captchaError.hidden = Boolean(token);
+    if (!token) return;
+
     submitButton.disabled = true;
     setFormStatus('Sending your message...', '');
 
@@ -222,14 +231,7 @@ if (contactForm) {
       const response = await fetch(FORM_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          name,
-          email,
-          message,
-          _subject: `Portfolio message from ${name}`,
-          _template: 'table',
-          _captcha: 'false'
-        })
+        body: JSON.stringify({ name, email, message, token })
       });
       const result = await response.json().catch(() => ({}));
 
@@ -238,9 +240,10 @@ if (contactForm) {
       }
 
       contactForm.reset();
-      setFormStatus('Thank you! Your message was sent. I will reply soon.', 'success');
-      petSay('Message sent! \u{1F389}', 4500);
+      window.location.href = 'thank-you.html';
+      return;
     } catch (error) {
+      if (window.turnstile) window.turnstile.reset();
       setFormStatus('Could not send it right now. Opening your email app instead.', 'error');
       openEmailApp(name, message);
     } finally {
@@ -644,12 +647,20 @@ function buildLampScene() {
     <line class="lamp-string" x1="70" y1="98" x2="70" y2="173"/>
     <circle class="lamp-bead" cx="70" cy="176" r="3.5"/>
     <g class="lamp-man"><g class="lamp-bob">
-      <line class="lamp-leg" x1="85" y1="236" x2="85" y2="254"/>
-      <line class="lamp-leg" x1="95" y1="236" x2="95" y2="254"/>
+      <line class="lamp-leg" x1="85" y1="236" x2="85" y2="251"/>
+      <line class="lamp-leg" x1="95" y1="236" x2="95" y2="251"/>
+      <ellipse class="lamp-shoe" cx="84" cy="254" rx="7" ry="3.2"/>
+      <ellipse class="lamp-shoe" cx="96" cy="254" rx="7" ry="3.2"/>
       <rect class="lamp-body" x="79" y="202" width="22" height="34" rx="9"/>
-      <circle class="lamp-head" cx="90" cy="190" r="10"/>
-      <circle class="lamp-eye" cx="86" cy="189" r="1.3"/>
-      <circle class="lamp-eye" cx="92" cy="189" r="1.3"/>
+      <path class="lamp-hair" d="M77 190 C75 176 83 169 90 169 C97 169 105 176 103 190 C106 200 104 212 108 221 C102 223 99 219 98 213 L82 213 C81 219 78 223 72 221 C76 212 74 200 77 190 Z"/>
+      <circle class="lamp-head" cx="90" cy="190" r="10.5"/>
+      <path class="lamp-hair" d="M79 189 C79 178 86 177 90 177 C95 177 101 179 101 189 C97 183 92 183 90 183 C86 183 82 185 79 189 Z"/>
+      <circle class="lamp-clip" cx="98" cy="180" r="2.2"/>
+      <circle class="lamp-eye" cx="85.5" cy="191" r="1.4"/>
+      <path class="lamp-wink" d="M91 191 Q93 189.3 95 191"/>
+      <circle class="lamp-blush" cx="83" cy="195" r="2"/>
+      <circle class="lamp-blush" cx="97" cy="195" r="2"/>
+      <path class="lamp-wink" d="M88 196 Q90 198 92 196"/>
       <polyline class="lamp-arm" points=""/>
     </g></g>
   </svg>`;
@@ -716,3 +727,13 @@ function playLampScene(nextTheme) {
     });
   }, 650);
 }
+
+// About cards: arrow buttons scroll the card row sideways.
+document.querySelectorAll('.values-wrap').forEach((wrap) => {
+  const row = wrap.querySelector('.values-grid');
+  wrap.querySelectorAll('[data-scroll]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      row.scrollBy({ left: Number(btn.dataset.scroll) * 280, behavior: 'smooth' });
+    });
+  });
+});

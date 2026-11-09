@@ -2540,3 +2540,47 @@ body.dark-theme .contact-section {
 @keyframes lamp-walk {
   50% { transform:translateY(-3px); }
 }
+
+
+/* ===== Added: scrolling about cards ===== */
+.values-wrap { min-width:0; }
+.scroll-controls { display:flex; align-items:center; justify-content:flex-end; gap:.6rem; margin-bottom:.9rem; }
+.scroll-hint { margin-right:auto; color:var(--muted); font:500 .68rem 'DM Mono',monospace; text-transform:uppercase; letter-spacing:.08em; }
+.scroll-controls button { display:grid; place-items:center; width:2.4rem; height:2.4rem; padding:0; border:0; border-radius:50%; background:var(--surface); color:var(--text); box-shadow:var(--clay-raised); cursor:pointer; }
+.scroll-controls button:hover { color:var(--accent); }
+.scroll-controls button:active { box-shadow:var(--clay-inset); }
+.values-grid { display:flex; gap:1.1rem; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; scroll-padding-inline:.4rem; padding:.5rem .4rem 1.6rem; scrollbar-width:thin; scrollbar-color:var(--accent) transparent; }
+.values-grid:focus-visible { outline:2px solid var(--accent); outline-offset:4px; border-radius:1rem; }
+.values-grid article { position:relative; flex:0 0 min(15rem,78%); scroll-snap-align:start; display:flex; flex-direction:column; gap:.5rem; min-height:11rem; }
+.values-grid article p { grid-column:auto; }
+.values-grid h3 a::before { content:""; position:absolute; inset:0; border-radius:inherit; }
+.values-grid h3 a:focus-visible { outline:2px solid var(--accent); outline-offset:6px; border-radius:.4rem; }
+
+/* ===== Added: screen pet FAQ ===== */
+.helper-panel { max-height:min(34rem,calc(100vh - 8rem)); overflow-y:auto; }
+.helper-faq { margin-top:1rem; padding-top:.9rem; border-top:1px solid var(--line); }
+.helper-faq h3 { margin:0 0 .6rem; color:var(--accent); font:500 .67rem 'DM Mono',monospace; letter-spacing:.1em; text-transform:uppercase; }
+.helper-faq details { margin-bottom:.4rem; border-radius:.65rem; box-shadow:var(--clay-inset); }
+.helper-faq summary { padding:.55rem .7rem; font-size:.76rem; font-weight:800; cursor:pointer; list-style:none; }
+.helper-faq summary::-webkit-details-marker { display:none; }
+.helper-faq summary::after { content:"+"; float:right; color:var(--accent); }
+.helper-faq details[open] summary::after { content:"\2212"; }
+.helper-faq details p { margin:0; padding:0 .7rem .65rem; color:var(--muted); font-size:.74rem; line-height:1.55; }
+.helper-faq details a { color:var(--accent); font-weight:800; }
+
+/* ===== Added: contact spam check, policy and thank-you pages ===== */
+.cf-turnstile { margin:.4rem 0 .5rem; min-height:65px; }
+.policy .direction-panel h2 { margin:1.6rem 0 .6rem; font-size:1.4rem; letter-spacing:-.03em; }
+.policy .direction-panel h2:first-child { margin-top:0; }
+.thanks h1 { color:var(--text); }
+.edu-certs .certificates-grid { grid-template-columns:repeat(auto-fill,minmax(13rem,15rem)); }
+
+/* ===== Added: chibi mascot pulls the lamp ===== */
+.lamp-man .lamp-leg { stroke:#f6efe6; stroke-width:5; }
+.lamp-shoe { fill:#f4c542; }
+.lamp-body { fill:#ffd873; }
+.lamp-hair { fill:#7a4a2e; }
+.lamp-clip { fill:#f4c542; }
+.lamp-wink { fill:none; stroke:#463954; stroke-width:1.2; stroke-linecap:round; }
+.lamp-blush { fill:#f7a8a0; opacity:.6; }
+.lamp-head { fill:#fde3cf; }
